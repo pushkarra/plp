@@ -1,0 +1,59 @@
+
+<div data-section-id="{{ section.id }}">
+   {%- if section.blocks.size > 0 -%}
+    <div class="fashion-block container mt-8 mb-8">
+  
+      {%- assign title = section.settings.title -%}
+  
+      <div class="flex flex-wrap sm:-mx-2">
+        <div class="w-full text-center sm:px-2">
+          <h2 class="h2">{{ title }}</h2>
+        </div>
+  
+        <div class="slider flex flex-wrap">
+        {%- for block in section.blocks -%}
+          {%- assign image = block.settings.image -%}
+          {%- assign see_all_text = block.settings.see_all_text -%}
+          {%- assign see_all_link = block.settings.see_all_link -%}
+          {%- assign text = block.settings.text -%}
+          {%- assign link_text = block.settings.link_text -%}
+          {%- assign link = block.settings.link -%}
+  
+          <div class="w-full sm:w-4/12 px-4 sm:px-2 pb-12 lg:pb-0">
+            {% if image != link %}
+              <a href="{{ link }}" class="nodecoration">
+            {% endif %}
+  
+            {% if image != blank %}
+            <img src="{{ image | img_url: '460x' }}" alt="{{ image.alt }}">
+            {% endif %}
+  
+            {{ text }}
+  
+            {% if image != link %}
+              {% if link_text != blank %}
+                <span class="nodecoration withArrow">{{ link_text }}</span>
+              {% endif %}
+            </a>
+
+            {% if see_all_link != blank and see_all_text != blank %}
+              <div>
+                <a href="{{ see_all_link }}" class="see-all">
+                  {{ see_all_text }}
+                  {%- render 'icon-see-all-arrow' %}
+                </a>
+              </div>
+            {% endif %}
+            
+
+
+            {% endif %}
+          </div>
+        {%- endfor -%}
+        </div>
+  
+      </div>
+  
+    </div>
+    {%- endif -%}
+  </div>

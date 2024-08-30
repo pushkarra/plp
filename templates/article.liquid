@@ -1,0 +1,106 @@
+{% assign number_of_comments = article.comments_count %}
+{% if comment and comment.created_at %}
+{% assign number_of_comments = article.comments_count %}
+{% endif %}
+
+<article itemscope itemtype="http://schema.org/Article">
+  <div class="container article pt-12">
+    <div class="flex flex-wrap article-content">
+      <div class="w-full pb-10">
+        {% capture date %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>{% endcapture %}
+        {{ date }}
+
+        <h1>{{ article.title }}</h1>
+      </div>
+
+      <div class="w-full">
+        <div>{{ article.content }}</div>
+      </div>
+
+      <div class="w-full">
+        <ul class="article-content__share">
+          {% if settings.share_facebook == true %}
+          <li class="facebook">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.secure_url }}{{ article.url }}">
+              <img src="{{ 'icon-facebook.svg' | asset_url }}" alt="facebook">
+              <span>Share</span>
+            </a>
+          </li>
+          {% endif %}
+          {% if settings.share_pinterest == true %}
+          <li class="pinit">
+            <a href="https://pinterest.com/pin/create/button/?url={{ shop.secure_url }}{{ article.url }}&media={{ article.image.src }}&description=">
+              <img src="{{ 'icon-pinterest.svg' | asset_url }}" alt="pinterest">
+              <span>Pin it</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="flex flex-wrap article-content">
+      <div class="w-full">
+        <hr>
+      </div>
+    </div>
+  </div>
+
+  <div class="container article mt-20">
+    <div class="flex flex-wrap article-content">
+
+      {% assign current_posts_slug = article.handle %}
+      {% assign related_posts = "" %}
+      {% for article in blogs.blog.articles | limit: 2 %}
+
+
+      {% capture post %}
+      {% if current_posts_slug != article.handle %}
+      <div class="w-full md:w-1/2 blog-element">
+        {% if article.image %}
+        <a href="{{ article.url }}" class="blog-element__image">
+          {{ article | img_url: '416x551', scale: 2, crop: 'center' | img_tag: article.title }}
+        </a>
+        {% endif %}
+
+        <div class="blog-element__excerpt">
+          <div class="blog-element__excerpt__text">
+            <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+
+            {{ date }}
+
+            {% if article.excerpt.size > 0 %}
+            {{ article.excerpt }}
+            {% else %}
+            {{ article.content | strip_html | truncate: 250 }}
+            {% endif %}
+          </div>
+
+          <a href="{{ article.url }}" class="article__link-continue"><span>{% include 'icon' with 'arrow' %}</span></a>
+        </div>
+      </div>
+      {% endif %}
+      {% endcapture %}
+      {% assign related_posts = related_posts | append:post %}
+
+
+      {% endfor %}
+
+      {% if related_posts.size > 0 %}
+      {{ related_posts }}
+      {% else %}
+      No related posts!
+      {% endif %}
+
+      <div class="w-full text-center mt-16">
+        <a href="{{ blog.url }}"
+           class="link-back-to-blog"
+           aria-label="{{ 'blogs.article.view_all_blogs' }}">
+          Back To All Posts
+        </a>
+      </div>
+    </div>
+  </div>
+</article>

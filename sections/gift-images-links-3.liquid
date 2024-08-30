@@ -1,0 +1,58 @@
+{%- if section.blocks.size > 0 -%}
+<section class="boot-images-links">
+  <div class="container">
+    <h2 class="text-center">{{ section.settings.title }}</h2>
+    <div class="flex flex-wrap justify-center text-center md:-mx-4">
+      {%- for block in section.blocks -%}
+        {%- assign image = block.settings.image -%}
+        {%- assign title = block.settings.title -%}
+        {%- assign link = block.settings.link -%}
+
+        <div class="w-full sm:w-1/2 md:w-1/5 pb-10 md:px-4">
+          <a href="{{ link }}" class="inline-block text-center">
+            <img src="{{ image | img_url: 'master' }}" alt="">
+            <p>{{ title }}</p>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Images and Links",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

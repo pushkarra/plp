@@ -1,0 +1,92 @@
+
+<div data-section-id="{{ section.id }}">
+  {%- if section.blocks.size > 0 -%}
+  <div class="wapsl-block container mid mb-32">
+
+    {%- assign title = section.settings.title -%}
+    {%- assign subtitle = section.settings.subtitle -%}
+
+    <li class="flex flex-wrap lg:-mx-4">
+      <div class="w-full text-center lg:px-4">
+        <h2>{{ title }}</h2>
+        <p>{{ subtitle }}</p>
+
+        <ul class="slider mt-10">
+        {%- for block in section.blocks -%}
+          {%- assign image = block.settings.image -%}
+          {%- assign text = block.settings.text -%}
+          {%- assign subtext = block.settings.subtext -%}
+
+          <li>
+            <span>
+              {% if image != blank %}
+              <span class="img">
+                <img src="{{ image | img_url: 'master' }}" alt="{{ image.alt }}" class="lazyload">
+              </span>
+              {% endif %}
+
+              <span><strong>{{ text }}</strong></span>
+              <span>{{ subtext }}</span>
+            </span>
+          </li>
+        {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Block",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "SubTitle"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Block",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

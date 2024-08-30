@@ -1,0 +1,30 @@
+{%- render 'image-block-content', section: section -%}
+
+{% schema %}
+{
+  "name": "Image Block",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_tablet",
+      "label": "Image (Tablet&Mobile width:768px)"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Block",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

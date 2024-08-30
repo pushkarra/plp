@@ -1,0 +1,113 @@
+{%- assign current_vendor = collection.current_vendor -%}
+{%- assign current_vendor_url_encode = collection.current_vendor | url_encode -%}
+
+{%- if collection.handle == 'womens' -%}
+  {% section 'collection-template-womens' %}
+{%- elsif collection.handle == 'mens-collection' -%}
+  {% section 'collection-template-men' %}
+{%- elsif collection.handle == 'kids-clothing' -%}
+  {% section 'collection-template-kids' %}
+{%- elsif collection.handle == 'women-s-shoes' -%}
+  {% section 'collection-template-shoes' %}
+{%- elsif collection.handle == 'bhfo-80-off-retail' -%}
+  {% section 'collection-template-shoes' %}
+{%- elsif collection.handle == 'test-all' -%}
+  {% section 'collection-template-test' %}
+{%- elsif collection.handle == 'cole-haan' or current_vendor_url_encode == 'Cole+Haan' -%}
+  {% section 'collection-template-cole-haan' %}
+{%- elsif collection.handle == 'vince-camuto' or current_vendor == 'Vince Camuto' -%}
+  {% section 'collection-template-vince-camuto' %}
+{%- elsif collection.handle == 'lucky-brand' or current_vendor == 'Lucky Brand' -%}
+  {% section 'collection-template-lucky-brand' %}
+{%- elsif collection.handle == 'bcbgmaxazria' or collection.handle == 'bcbgmaxazria-collection-1' or current_vendor == 'BCBGMAXAZRIA' -%}
+  {% section 'collection-template-bcbgmaxazria' %}
+{%- elsif collection.handle == 'reebok' or current_vendor == 'Reebok' -%}
+  {% section 'collection-template-reebok' %}
+{%- elsif collection.handle == 'puma' or current_vendor == 'Puma' -%}
+  {% section 'collection-template-puma' %}
+{%- elsif collection.handle == 'fila' or current_vendor == 'Fila' -%}
+  {% section 'collection-template-fila' %}
+{%- elsif collection.handle == 'ugg' or current_vendor == 'Ugg' or current_vendor == 'Ugg Australia' -%}
+  {% section 'collection-template-ugg' %}
+{%- elsif collection.handle == 'french-connection' or current_vendor == 'French Connection' -%}
+  {% section 'collection-template-french-connection' %}
+{%- elsif collection.handle == 'asics' -%}
+  {% section 'collection-template-asics' %}
+{%- elsif collection.handle == 'new-balance' -%}
+  {% section 'collection-template-new-balance' %}
+{%- elsif collection.handle == 'ralph-lauren-mens-and-womens' -%}
+  {% section 'collection-template-ralph-lauren-mens-and-womens' %}
+{%- elsif collection.handle == 'calvin-klein' or current_vendor == 'Calvin Klein' -%}
+  {% section 'collection-template-calvin-klein' %}
+{%- elsif collection.handle == 'michael-kors' or current_vendor_url_encode == 'Michael+Kors' or current_vendor_url_encode == 'MICHAEL+Michael+Kors' or current_vendor_url_encode == 'KORS+Michael+Kors' -%}
+  {% section 'collection-template-michael-kors' %}
+{%- elsif collection.handle == 'mizuno' -%}
+  {% section 'collection-template-mizuno' %}
+{%- elsif collection.handle == 'tommy-hilfiger' or current_vendor == 'Tommy Hilfiger' -%}
+  {% section 'collection-template-tommy-hilfiger' %}
+{%- elsif collection.handle == 'birkenstock' -%}
+  {% section 'collection-template-birkenstock' %}
+{%- elsif collection.handle == 'clarks-mens-collection' or current_vendor == 'Clarks' -%}
+  {% section 'collection-template-clarks' %}
+{%- elsif collection.handle == 'bcbgeneration-collection' or current_vendor == 'BCBGeneration' -%}
+  {% section 'collection-template-bcbgeneration' %}
+{%- elsif collection.handle == 'free-people-collection' or current_vendor == 'Free People' -%}
+  {% section 'collection-template-free-people' %}
+{%- elsif collection.handle == 'steve-madden' or current_vendor == 'Steve Madden' -%}
+  {% section 'collection-template-steve-madden' %}
+{%- elsif collection.handle == 'aqua' or current_vendor == 'Aqua' -%}
+  {% section 'collection-template-aqua' %}
+{%- elsif collection.handle == 'rag-bone' or current_vendor_url_encode == 'Rag+%26amp%3B+Bone' -%}
+  {% section 'collection-template-rag-bone' %}
+{%- elsif current_vendor == 'Jessica Simpson' -%}
+  {% section 'collection-template-jessica-simpson' %}
+{%- elsif current_vendor_url_encode == 'Levi%26%2339%3Bs' or current_vendor == 'Levi Strauss' or current_vendor_url_encode == 'Levi+Strauss+%26amp%3B+Co.' -%}
+  {% section 'collection-template-levis' %}
+{%- elsif current_vendor == 'Elie Tahari' -%}
+  {% section 'collection-template-elie-tahari' %}
+{%- elsif current_vendor == 'Marc Fisher' or current_vendor == 'Marc Fisher LTD' -%}
+  {% section 'collection-template-marc-fisher' %}
+{%- elsif current_vendor == 'Emu Ridge' -%}
+  {% section 'collection-template-emu-ridge' %}
+{%- elsif current_vendor == 'Ralph Lauren' -%}
+  {% section 'collection-template-ralph-lauren' %}
+{%- elsif collection.handle == 'alfani' or current_vendor == 'Alfani' -%}
+  {% section 'collection-template-alfani' %}
+{%- elsif current_vendor_url_encode == 'Joe%26%2339%3Bs+Jeans' -%}
+  {% section 'collection-template-joes-jeans' %}
+{%- elsif current_vendor == 'Naturalizer' -%}
+  {% section 'collection-template-naturalizer' %}
+{%- elsif collection.handle == 'adidas' or current_vendor == 'Adidas' -%}
+  {% section 'collection-template-adidas' %}
+{%- elsif collection.handle == 'j-brand' or current_vendor_url_encode == 'J+Brand' -%}
+  {% section 'collection-template-j-brand' %}
+{%- elsif collection.handle == 'inc' or current_vendor == 'INC' -%}
+  {% section 'collection-template-inc' %}
+{%- else -%}
+  {% section 'collection-template' %}
+{%- endif -%}
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "ItemList",
+    "url": {{ shop.url | append: collection.url | json }},
+    "itemListElement":[
+      {% for product in collection.products %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "url": {{ shop.url | append: product.url | json }},
+        "name": {{ product.title | json }},
+        {%- if product.featured_media -%}
+        "image": [
+          {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+        ],
+        {%- endif -%}
+        "description": {{ product.description | strip_html | json }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  }
+</script>

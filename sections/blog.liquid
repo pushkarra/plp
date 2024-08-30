@@ -1,0 +1,93 @@
+{%- assign image_1 = section.settings.image_1 -%}
+{%- assign image_1_link = section.settings.image_1_link -%}
+{%- assign image_2 = section.settings.image_2 -%}
+{%- assign image_2_link = section.settings.image_2_link -%}
+
+
+{% paginate blog.articles by 6 %}
+
+<div class="container blog pt-12">
+  <div class="flex flex-wrap">
+    {% if image_1 != blank %}
+    <div class="w-full pb-16">
+      {% if image_1_link != blank %}<a href="{{ image_1_link }}">{% endif %}
+      <img src="{{ image_1 | img_url: '1216x', scale: 2 }}" alt="{{ image_1.alt }}">
+      {% if image_1_link != blank %}</a>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="w-full">
+      <ul class="blog-posts flex flex-wrap md:-mx-4">
+        {% for article in blog.articles limit: 3 %}
+        <li class="w-full md:w-4/12 md:px-4 pb-10">
+          <div>
+            {% include 'article' %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% if image_2 != blank %}
+    <div class="w-full pb-16">
+      {% if image_2_link != blank %}<a href="{{ image_2_link }}">{% endif %}
+      <img src="{{ image_2 | img_url: '1216x', scale: 2 }}" alt="{{ image_2.alt }}">
+      {% if image_2_link != blank %}</a>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="w-full">
+      <ul class="blog-posts flex flex-wrap md:-mx-4">
+        {% for article in blog.articles offset: 3 %}
+        <li class="w-full md:w-4/12 md:px-4 pb-10">
+          <div>
+            {% include 'article' %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="w-full text-center">
+      {% if paginate.pages > 1 %}
+      {% include 'pagination', paginate: paginate, classblog: 'blog' %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "image_1_link",
+      "label": "Banner link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "image_2_link",
+      "label": "Banner link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1125 @@
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+</div>
+
+<div class="product-template__container container"
+     id="ProductSection-{{ section.id }}"
+     data-section-id="{{ section.id }}"
+     data-section-type="product"
+     data-enable-history-state="true"
+     data-ajax-enabled="{{ settings.enable_ajax }}"
+>
+  {% comment %}
+  Get first variant, or deep linked one
+  {% endcomment %}
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign product_image_zoom_size = '1376x1376' -%}
+  {%- assign product_image_scale = '2' -%}
+  {%- assign enable_image_zoom = section.settings.enable_image_zoom -%}
+  {%- assign compare_at_price = current_variant.compare_at_price -%}
+  {%- assign price = current_variant.price -%}
+  {%- assign show_vendor = section.settings.show_vendor -%}
+  {%- assign variant_inventory =  current_variant.inventory_quantity -%}
+
+  {%- assign height = 688 -%}
+
+  {%- if current_variant.compare_at_price > current_variant.price -%}
+    {%- capture discount -%}
+      {%- include 'product-discount', price: current_variant.price, compare_at_price: current_variant.compare_at_price -%}
+    {%- endcapture -%}
+  {%- endif -%}
+  <div class="product-single flex flex-wrap xl:flex-no-wrap xl:-mx-4{% if section.settings.enable_payment_button %} product-single--{{ section.settings.media_size }}-media{% endif %}">
+    <div class="w-full md:w-1/2 xl:w-7/12 xl:mx-4 mb-2 sm:mb-6 lg:mb-10 xl:mb-0 relative">
+      {% if discount != blank %}
+      <div class="product-single__discount">{{ discount }}</div>
+      {% endif %}
+      <div class="product-single__media-wrapper {{ product_media_width }} {% if product.media.size < 2 %}no-thumbnails{% endif %}" data-product-single-media-group>
+        {% if product.media.size < 2 %}
+          {%- assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+
+          {%- for media in product.media -%}
+            {% include 'media', media: media, featured_media: featured_media, height: height, enable_image_zoom: enable_image_zoom, image_zoom_size: product_image_zoom_size, image_scale: product_image_scale %}
+          {%- endfor -%}
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+      <div class="product-single__thumbnails-wrapper">
+        <ul class="product-single__thumbnails product-single__thumbnails-{{ section.id }}">
+          {% if product.has_only_default_variant %}
+            {% for media in product.media %}
+            <li class="product-single__thumbnails-item product-single__thumbnails-item--{{ section.settings.media_size }} js" data-color="{{ media.alt }}">
+
+              {% comment %}
+              {%- capture thumbnailAlt -%}
+              {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              {{ 'sections.featured_product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- elsif media.media_type == 'model' -%}
+              {{ 'sections.featured_product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- else -%}
+              {{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- endif -%}
+              {%- endcapture -%}
+              {% endcomment %}
+
+              <span><img class="product-single__thumbnail-image" src="{{ media.preview_image | img_url: '160x160', crop: 'center', scale: 2 }}" alt="{{ media.alt }}"></span>
+              {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
+              <div class="product-single__thumbnail-badge">
+                {% include 'icon-video-badge-full-color' %}
+              </div>
+              {%- endif -%}
+              {%- if media.media_type == 'model' -%}
+              <div class="product-single__thumbnail-badge">
+                {% include 'icon-3d-badge-full-color' %}
+              </div>
+              {%- endif -%}
+            </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="product-single__video block sm:hidden">
+        <a href="#product-single__video"><img src="https:{{ 'img_thumbnail_video.svg' | asset_url }}" alt=""> VIDEO</a>
+        <div id="product-single__video"></div>
+      </div>
+    </div>
+
+    <div class="w-full md:w-1/2 xl:w-5/12 xl:mx-4">
+      <div class="product-single__summary">
+        <div class="product-single__meta">
+
+          {% if show_vendor and product.type != 'Gift Card' %}
+          <div class="product-single__vendor">{{ product.vendor | link_to_vendor }}</div>
+          {% endif %}
+
+          <h1 class="product-single__title">{{ product.title | remove: product.vendor | remove: 'Womens' | remove: "Women's" | remove: "Women`s" | remove: "Women’s" | remove: 'Mens' | remove: "Men's" | remove: 'Kids' }}</h1>
+          <div class="stjr-product-rating" data-product-id="{{ product.selected_or_first_available_variant.sku|default:product.selected_or_first_available_variant.id }}"  data-group="item_group" data-group-value="{{product.id}}"></div>
+          {% if product.type != 'Gift Card' %}
+            {%comment%}
+            {% if product.metafields.okendo.summaryData.reviewCount > 0 %}
+            {% render 'okendo-reviews-product-rating-summary', product: product %}
+            {% else %}
+            {% render 'okendo-reviews-pdp-product-rating-summary', product: product %}
+            {% endif %}
+            {%endcomment%}
+          {% endif %}
+          {% comment %}
+          {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+          <div class="product__policies rte" data-product-policies>
+            {%- if shop.taxes_included -%}
+            {{ 'products.product.include_taxes' | t }}
+            {%- endif -%}
+            {%- if shop.shipping_policy.body != blank -%}
+            {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+            {%- endif -%}
+          </div>
+          {%- endif -%}
+          {% endcomment %}
+
+          {% assign option_index = 0 %}
+          {% for variant in product.variants %}
+            {% assign option_index = forloop.index0 | plus: 1 %}
+          {% endfor %}
+
+
+          {% capture "form_classes" -%}
+          product-form product-form-{{ section.id }}
+          {%- unless section.settings.show_variant_labels %} product-form--hide-variant-labels {% endunless %}
+          {%- if section.settings.enable_payment_button and product.has_only_default_variant %} product-form--payment-button-no-variants {%- endif -%}
+          {%- if current_variant.available == false %} product-form--variant-sold-out {%- endif -%}
+          {%- if option_index == 0 %} pt-5 {%- endif -%}
+          {%- endcapture %}
+
+          <div class="flex flex-wrap">
+            <div class="w-6/12 mb-1">
+              <p class="product-single__price product-single__price-{{ section.id }}{% unless current_variant.available %} product-price--sold-out{% endunless %}">
+                {% if current_variant.compare_at_price > current_variant.price %}
+                  <span class="product-price__price product-price__price-{{ section.id }} product-price__sale product-price__sale--single">
+                  <span id="ProductPrice-{{ section.id }}"
+                        itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+                          {{ current_variant.price | money_without_trailing_zeros }}
+                  </span>
+                  <span class="product-price__sale-label product-price__sale-label-{{ section.id }} hidden">{{ 'products.product.on_sale' | t }}</span>
+                  </span>
+                  <span class="hidden">{{ 'products.product.regular_price' | t }}</span>
+                  <s id="ComparePrice-{{ section.id }}">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</s>
+                  {% if discount != blank %}
+                  <span class="product-price__discount">{{ discount }}</span>
+                  {% endif %}
+                {% else %}
+                  <span class="hidden">{{ 'products.product.regular_price' | t }}</span>
+                  <s id="ComparePrice-{{ section.id }}" class="hide">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</s>
+                  <span class="product-price__price product-price__price-{{ section.id }}">
+                  <span id="ProductPrice-{{ section.id }}"
+                        itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+                  {{ current_variant.price | money_without_trailing_zeros }}
+                  </span>
+                  <span class="product-price__sale-label product-price__sale-label-{{ section.id }} hidden">{{ 'products.product.on_sale' | t }}</span>
+                  </span>
+                {% endif %}
+              </p>
+            </div>
+            <div class="w-6/12">
+              {% if product.type != 'Gift Card' %}
+                {% for variant in product.variants %}
+                  {% assign variant_price = variant.price | without_trailing_zeros %}
+                  {% if variant_price > 3500 %}
+                    {% comment %}
+                      <!-- Placement v2 -->
+                      <klarna-placement
+                        data-key="credit-promotion-auto-size"
+                        data-locale="en-US"
+                        data-purchase-amount="{{ variant_price }}"
+                        data-variant-id="{{ variant.id }}"
+                        class="{%- if variant == current_variant -%} block {%- else -%} hidden {%- endif -%}"
+                      ></klarna-placement>
+                      <!-- end Placement -->
+                   {% endcomment %}
+                  {% endif %}
+                </option>
+                {% endfor %}
+              {% endif %}
+            </div>
+            </div>
+
+          {% assign sizeChartPopup = false %}
+         
+          {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
+          {{ form | payment_terms }}
+
+         <!-- Show popup msg based on tags - Clearence, Final Sale etc-->
+          <div id="tags-popup" class="white-popup mfp-hide">
+                {% for block in section.blocks %}
+                  {% if block.settings.name_tag == 'clearance' %}
+                  <div class="tag--popup--item" data-id="{{ block.settings.name_tag }}">
+                    <div class="w-full">
+                      <div class="tag--item tag--securitty--tag clearance--sale__tag">
+                        <div class="absolute--bg--tag"></div>
+                        <div class="relative--tag--securitty">
+                          <a href="#" class="open--popup--tag js--tag__popup" data-id="clearance">
+                            <span class="name--securitty--item">Promos Don’t Apply</span>
+                            <span class="icon--securitty--item">
+                              {% include 'icon--information-button' %}
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-full">
+                      {% if block.settings.text_tag != blank %}
+                        <div class="description--popup--tag">
+                          {{ block.settings.text_tag }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% elsif block.settings.name_tag == 'security-tag' %}
+                  <div class="tag--popup--item" data-id="{{ block.settings.name_tag }}">
+                    <div class="w-full">
+                      <div class="tag--item tag--securitty--tag">
+                        <div class="absolute--bg--tag"></div>
+                        <div class="relative--tag--securitty">
+                          <a href="#" class="open--popup--tag js--tag__popup" data-id="security-tag">
+                            <span class="name--securitty--item">Security Tag</span>
+                            <span class="icon--securitty--item">
+                              {% include 'icon--information-button' %}
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-full">
+                      {% if block.settings.text_tag != blank %}
+                        <div class="description--popup--tag">
+                          {{ block.settings.text_tag }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% elsif block.settings.name_tag == 'final-sale' %}
+                  <div class="tag--popup--item" data-id="{{ block.settings.name_tag }}">
+                    <div class="w-full">
+                      <div class="tag--item tag--securitty--tag final--sale__tag">
+                        <div class="absolute--bg--tag"></div>
+                        <div class="relative--tag--securitty">
+                          <a href="#" class="open--popup--tag js--tag__popup" data-id="final-sale">
+                            <span class="name--securitty--item">Final Sale</span>
+                            <span class="icon--securitty--item">
+                              {% include 'icon--information-button' %}
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-full">
+                      {% if block.settings.text_tag != blank %}
+                        <div class="description--popup--tag">
+                          {{ block.settings.text_tag }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              {% for tag in product.tags %}
+                {% if tag == 'clearance' %}
+                <style>.product-single .product-single__summary .product-form__size-chart{top:120px !important;}</style>
+                <div class="">
+                  <div class="tag--item tag--securitty--tag clearance--sale__tag">
+                    <div class="absolute--bg--tag"></div>
+                    <div class="relative--tag--securitty">
+                      <a href="#tags-popup" class="open--popup--tag js--tag__popup" data-id="clearance">
+                        <span class="name--securitty--item">Promos Don’t Apply</span>
+                        <span class="icon--securitty--item">
+                          {% include 'icon--information-button' %}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {% elsif tag == 'security-tag' %}
+                <style>.product-single .product-single__summary .product-form__size-chart{top:120px !important;}</style>
+                <div class="">
+                  <div class="tag--item tag--securitty--tag">
+                    <div class="absolute--bg--tag"></div>
+                    <div class="relative--tag--securitty">
+                      <a href="#tags-popup" class="open--popup--tag js--tag__popup" data-id="security-tag">
+                        <span class="name--securitty--item">Security Tag</span>
+                        <span class="icon--securitty--item">
+                          {% include 'icon--information-button' %}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {% elsif tag == 'final-sale' %}
+                <style>.product-single .product-single__summary .product-form__size-chart{top:120px !important;}</style>
+                <div class="">
+                  <div class="tag--item tag--securitty--tag final--sale__tag">
+                    <div class="absolute--bg--tag"></div>
+                    <div class="relative--tag--securitty">
+                      <a href="#tags-popup" class="open--popup--tag js--tag__popup" data-id="final-sale">
+                        <span class="name--securitty--item">Final Sale</span>
+                        <span class="icon--securitty--item">
+                          {% include 'icon--information-button' %}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              {% endfor %}
+
+            
+            
+          {% unless product.has_only_default_variant %}
+          <div class="product-form__controls-group border-top">
+            {% for option in product.options_with_values %}
+              <div class="selector-wrapper js product-form__item {{ option.name }}">
+                <label {% if option.name == 'default' %} class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                {% assign shoes = "Shoes, Sandals, Boots, Flats, Oxfords, Heels, Flip, Slippers" | split: ", " %}
+                {% if option.name == 'Size' %}
+                  {% for shoe in shoes %}
+                    {% if product.type contains shoe %}
+                      {{ gender }}
+
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+
+                  {% for value in option.values %}
+                    {%- assign valueMod = value | remove: ' Medium ' | remove: '(B,M)' | remove: '(D)' -%}
+                    {% assign pdpSizes = pdpSizes | append: value | append: ", " %}
+                    {% assign values = "XXS,XS,S,M,L,XL,XXL,XXXL,XXXXL,0,2,4,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,13,14,16,23,24,25,26,27,28,29,30,31,32,33,34,36,38,40" | split:"," %}
+
+                    {% if values contains valueMod %}
+                      {% assign sizeChartPopup = true %}
+                    {% else %}
+                      {% assign sizeChartPopup = false %}
+                    {% endif %}
+                  {% endfor %}
+                  {% assign pdpSizes = pdpSizes | split: ", " %}
+
+                {% endif %}
+                {{ option.name }}:
+                </label>
+                <span>
+                  {% for value in option.values %}
+                    {% if option.selected_value == value %}
+                      {{ value }}
+                    {% endif %}
+                  {% endfor %}
+                </span>
+
+                  <ul class="product-form__option">
+                    {% for value in option.values %}
+                      
+                     <!-- Collect available colors with stock -->
+                        {% assign available_colors = '' %}
+                        {% for variant in product.variants %}
+                          {% if variant.inventory_quantity > 0 %}
+                            {% unless available_colors contains variant.option2 %}
+                               {% assign available_colors = available_colors | append: variant.option2 | append: ',' %}
+                            {% endunless %}
+                          {% endif %}
+                        {% endfor %}
+                      
+                       <!--  Available colors array --> 
+                       {% assign available_colors_array = available_colors | split: ',' %}
+                      
+                          <!-- List only available colors with stock as options -->
+                          {% if option.name == 'Color' %}
+                             {% for color in available_colors_array %}  
+                                <li class="{% if option.selected_value == color %}active{% endif %}" data-value="{{ color }}" data-value-schart="{{ color }}" title="{{ color }}">{{ color }}</li>
+                            {% endfor %}
+                            {% break %}
+                          {% else %} 
+                               <li class="{% if option.selected_value == value %}active {% endif %}" data-value="{{ value }}" data-value-schart="{{ value | remove: ' Medium ' | remove: '(B,M)' | remove: '(D)' }}" title="{{ value }}">{{ value }}</li>
+                        {% endif %}
+                    {% endfor %}
+                  </ul>
+  
+
+                <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input hidden" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+                  {% for value in option.values %}
+                  <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            {% endfor %}
+          </div>
+          {% endunless %}
+
+          {% if product.type != 'Gift Card' %}
+
+            {% for tag in product.tags %}
+              {% if tag contains 'Gender: ' %}
+                {% assign gender = tag | remove: 'Gender: ' | strip %}
+
+                {% if gender == 'Women' %}
+                  {% assign imgSizeChart = settings.sizechart_women %}
+                {% elsif gender == 'Men' %}
+                  {% assign imgSizeChart = settings.sizechart_men %}
+                {% endif %}
+              {% else %}
+                {% assign imgSizeChart = settings.sizechart_general %}
+              {% endif %}
+            {% endfor %}
+
+            {% for collection in product.collections %}
+              {% if gender == 'Women' %}
+                {% if collection.title contains 'Dress' %}
+                  {% assign type = 'dresses' %}
+                {% elsif collection.title contains 'Jeans' %}
+                  {% assign type = 'jeans' %}
+                {% elsif collection.title contains 'Jacket' %}
+                  {% assign type = 'jackets' %}
+                {% elsif collection.title contains 'Coats' %}
+                  {% assign type = 'coats' %}
+                {% elsif collection.title contains 'Activewear'
+                         or collection.title contains 'Skirts'
+                         or collection.title contains 'Comfy'
+                         or collection.title contains 'Sweaters'
+                         or collection.title contains 'Sweats'
+                         or collection.title contains 'Hoodies'
+                         or collection.title contains 'Tops'
+                         or collection.title contains 'Jumpsuits'
+                         or collection.title contains 'Rompers'
+                         or collection.title contains 'Swimsuits'
+                         or collection.title contains 'Underwear'
+                %}
+                  {% assign type = 'activewear' %}
+                {% elsif collection.title contains 'Shoes' %}
+                  {% assign type = 'women_shoes' %}
+                {% endif %}
+              {% endif %}
+
+              {% if gender == 'Men' %}
+                {% if collection.title contains 'Jeans' %}
+                  {% assign type = 'men_jeans' %}
+                {% elsif collection.title contains 'Jackets'
+                       or collection.title contains 'Blazers'
+                %}
+                  {% assign type = 'men_jackets' %}
+                {% elsif collection.title contains 'Activewear'
+                         or collection.title contains 'Coats'
+                         or collection.title contains 'Shirts'
+                         or collection.title contains 'Casual'
+                         or collection.title contains 'Suits'
+                         or collection.title contains 'Joggers'
+                         or collection.title contains 'Swimwear'
+                         or collection.title contains 'Sweaters'
+                         or collection.title contains 'Sweatshirts'
+                         or collection.title contains 'Underwear'
+                %}
+                  {% assign type = 'men_default' %}
+                {% elsif collection.title contains 'Shoes' %}
+                  {% assign type = 'men_shoes' %}
+                {% elsif collection.title contains 'Pants'
+                         or collection.title contains 'Trousers'
+                %}
+                  {% assign type = 'men_pants' %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            <p class="product-form__size-chart{% if product.has_only_default_variant %} no-variation text-left sm:text-right{% endif %}">
+              {% if sizeChartPopup == true %}
+                {% if gender == 'Women' and type == 'dresses' %}
+                  <a href="#popup-women-dresses" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Women' and type == 'jeans' %}
+                  <a href="#popup-women-jeans" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Women' and type == 'jackets' %}
+                  <a href="#popup-women-jackets" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Women' and type == 'coats' %}
+                  <a href="#popup-women-coats" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Women' and type == 'activewear' %}
+                  <a href="#popup-women-activewear" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Women' and type == 'women_shoes' %}
+                  <a href="#popup-women-shoes" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Men' and type == 'men_jeans' %}
+                  <a href="#popup-men-jeans" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Men' and type == 'men_jackets' %}
+                  <a href="#popup-men-jackets" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Men' and type == 'men_default' %}
+                  <a href="#popup-men-default" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Men' and type == 'men_shoes' %}
+                  <a href="#popup-men-shoes" class="product-form__size-chart__popup">Size Chart</a>
+                {% elsif gender == 'Men' and type == 'men_pants' %}
+                  <a href="#popup-men-pants" class="product-form__size-chart__popup">Size Chart</a>
+                {% else %}
+                  <a href="{{ imgSizeChart | img_url: 'master' }}" class="product-form__size-chart__link">Size Chart</a>
+                {% endif %}
+              {% else %}
+                <a href="{{ imgSizeChart | img_url: 'master' }}" class="product-form__size-chart__link">Size Chart</a>
+              {% endif %}
+            </p>
+
+            {% if gender == 'Women' and type == 'dresses' %}
+              {% assign xxs   = settings.women_dresses_xxs %}
+              {% assign xs    = settings.women_dresses_xs %}
+              {% assign s     = settings.women_dresses_s %}
+              {% assign m     = settings.women_dresses_m %}
+              {% assign l     = settings.women_dresses_l %}
+              {% assign xl    = settings.women_dresses_xl %}
+              {% assign xxl   = settings.women_dresses_xxl %}
+              {% assign xxxl  = settings.women_dresses_xxxl %}
+              {% assign xxxxl = settings.women_dresses_xxxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-dresses',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl,
+                  xxxxl: xxxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Women' and type == 'jeans' %}
+              {% assign xxs   = settings.women_jeans_xxs %}
+              {% assign xs    = settings.women_jeans_xs %}
+              {% assign s     = settings.women_jeans_s %}
+              {% assign m     = settings.women_jeans_m %}
+              {% assign l     = settings.women_jeans_l %}
+              {% assign xl    = settings.women_jeans_xl %}
+              {% assign xxl   = settings.women_jeans_xxl %}
+              {% assign xxxl  = settings.women_jeans_xxxl %}
+              {% assign xxxxl = settings.women_jeans_xxxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-jeans',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl,
+                  xxxxl: xxxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Women' and type == 'jackets' %}
+              {% assign xxs   = settings.women_jackets_xxs %}
+              {% assign xs    = settings.women_jackets_xs %}
+              {% assign s     = settings.women_jackets_s %}
+              {% assign m     = settings.women_jackets_m %}
+              {% assign l     = settings.women_jackets_l %}
+              {% assign xl    = settings.women_jackets_xl %}
+              {% assign xxl   = settings.women_jackets_xxl %}
+              {% assign xxxl  = settings.women_jackets_xxxl %}
+              {% assign xxxxl = settings.women_jackets_xxxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-jackets',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl,
+                  xxxxl: xxxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Women' and type == 'coats' %}
+              {% assign xxs   = settings.women_coats_xxs %}
+              {% assign xs    = settings.women_coats_xs %}
+              {% assign s     = settings.women_coats_s %}
+              {% assign m     = settings.women_coats_m %}
+              {% assign l     = settings.women_coats_l %}
+              {% assign xl    = settings.women_coats_xl %}
+              {% assign xxl   = settings.women_coats_xxl %}
+              {% assign xxxl  = settings.women_coats_xxxl %}
+              {% assign xxxxl = settings.women_coats_xxxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-coats',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl,
+                  xxxxl: xxxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Women' and type == 'activewear' %}
+              {% assign xxs   = settings.women_activewear_xxs %}
+              {% assign xs    = settings.women_activewear_xs %}
+              {% assign s     = settings.women_activewear_s %}
+              {% assign m     = settings.women_activewear_m %}
+              {% assign l     = settings.women_activewear_l %}
+              {% assign xl    = settings.women_activewear_xl %}
+              {% assign xxl   = settings.women_activewear_xxl %}
+              {% assign xxxl  = settings.women_activewear_xxxl %}
+              {% assign xxxxl = settings.women_activewear_xxxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-activewear',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl,
+                  xxxxl: xxxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Women' and type == 'women_shoes' %}
+              {% assign xxs   = settings.women_shoes_xxs %}
+              {% assign xxs2   = settings.women_shoes_xxs2 %}
+              {% assign xs    = settings.women_shoes_xs %}
+              {% assign xs2    = settings.women_shoes_xs2 %}
+              {% assign s     = settings.women_shoes_s %}
+              {% assign s2     = settings.women_shoes_s2 %}
+              {% assign m     = settings.women_shoes_m %}
+              {% assign m2     = settings.women_shoes_m2 %}
+              {% assign l     = settings.women_shoes_l %}
+              {% assign l2     = settings.women_shoes_l2 %}
+              {% assign xl    = settings.women_shoes_xl %}
+              {% assign xl2    = settings.women_shoes_xl2 %}
+              {% assign xxl   = settings.women_shoes_xxl %}
+              {% assign xxl2   = settings.women_shoes_xxl2 %}
+              {% assign xxxl  = settings.women_shoes_xxxl %}
+              {% assign xxxl2  = settings.women_shoes_xxxl2 %}
+              {% assign xxxxl = settings.women_shoes_xxxxl %}
+              {% assign xxxxl2 = settings.women_shoes_xxxxl2 %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-women-shoes',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xxs2: xxs2,
+                  xs: xs,
+                  xs2: xs2,
+                  s: s,
+                  s2: s2,
+                  m: m,
+                  m2: m2,
+                  l: l,
+                  xl: xl,
+                  xl2: xl2,
+                  xxl: xxl,
+                  xxl2: xxl2,
+                  xxxl: xxxl,
+                  xxxl2: xxxl2,
+                  xxxxl: xxxxl,
+                  xxxxl2: xxxxl2
+              %}
+            {% endif %}
+
+            {% if gender == 'Men' and type == 'men_default' %}
+              {% assign xs    = settings.men_default_xs %}
+              {% assign s     = settings.men_default_s %}
+              {% assign m     = settings.men_default_m %}
+              {% assign l     = settings.men_default_l %}
+              {% assign xl    = settings.men_default_xl %}
+              {% assign xxl   = settings.men_default_xxl %}
+              {% assign xxxl  = settings.men_default_xxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-men-default',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Men' and type == 'men_jeans' %}
+              {% assign xs    = settings.men_jeans_xs %}
+              {% assign s     = settings.men_jeans_s %}
+              {% assign m     = settings.men_jeans_m %}
+              {% assign l     = settings.men_jeans_l %}
+              {% assign xl    = settings.men_jeans_xl %}
+              {% assign xxl   = settings.men_jeans_xxl %}
+              {% assign xxxl  = settings.men_jeans_xxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-men-jeans',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Men' and type == 'men_jackets' %}
+              {% assign xs    = settings.men_jackets_xs %}
+              {% assign s     = settings.men_jackets_s %}
+              {% assign m     = settings.men_jackets_m %}
+              {% assign l     = settings.men_jackets_l %}
+              {% assign xl    = settings.men_jackets_xl %}
+              {% assign xxl   = settings.men_jackets_xxl %}
+              {% assign xxxl  = settings.men_jackets_xxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-men-jackets',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xs: xs,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl
+              %}
+            {% endif %}
+
+            {% if gender == 'Men' and type == 'men_shoes' %}
+              {% assign xxs   = settings.men_shoes_xxs %}
+              {% assign xxs2   = settings.men_shoes_xxs2 %}
+              {% assign xs    = settings.men_shoes_xs %}
+              {% assign xs2    = settings.men_shoes_xs2 %}
+              {% assign s     = settings.men_shoes_s %}
+              {% assign s2     = settings.men_shoes_s2 %}
+              {% assign m     = settings.men_shoes_m %}
+              {% assign m2     = settings.men_shoes_m2 %}
+              {% assign l     = settings.men_shoes_l %}
+              {% assign l2     = settings.men_shoes_l2 %}
+              {% assign xl    = settings.men_shoes_xl %}
+              {% assign xl2    = settings.men_shoes_xl2 %}
+              {% assign xxl   = settings.men_shoes_xxl %}
+              {% assign xxl2   = settings.men_shoes_xxl2 %}
+              {% assign xxxl  = settings.men_shoes_xxxl %}
+              {% assign xxxl2  = settings.men_shoes_xxxl2 %}
+              {% assign xxxxl = settings.men_shoes_xxxxl %}
+              {% assign xxxxl2 = settings.men_shoes_xxxxl2 %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-men-shoes',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  xxs: xxs,
+                  xxs2: xxs2,
+                  xs: xs,
+                  xs2: xs2,
+                  s: s,
+                  s2: s2,
+                  m: m,
+                  m2: m2,
+                  l: l,
+                  l2: l2,
+                  xl: xl,
+                  xl2: xl2,
+                  xxl: xxl,
+                  xxl2: xxl2,
+                  xxxl: xxxl,
+                  xxxl2: xxxl2,
+                  xxxxl: xxxxl,
+                  xxxxl2: xxxxl2
+              %}
+            {% endif %}
+
+            {% if gender == 'Men' and type == 'men_pants' %}
+              {% assign s     = settings.men_pants_s %}
+              {% assign m     = settings.men_pants_m %}
+              {% assign l     = settings.men_pants_l %}
+              {% assign xl    = settings.men_pants_xl %}
+              {% assign xxl   = settings.men_pants_xxl %}
+              {% assign xxxl  = settings.men_pants_xxxl %}
+
+              {% render 'sizechart-popup',
+                  product: product,
+                  id: 'popup-men-pants',
+                  pdpSizes: pdpSizes,
+                  gender: gender,
+                  type: type,
+                  s: s,
+                  m: m,
+                  l: l,
+                  xl: xl,
+                  xxl: xxl,
+                  xxxl: xxxl
+              %}
+            {% endif %}
+
+          {% endif %}
+
+
+          <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
+            {% for variant in product.variants %}
+            <option value="{{ variant.id }}"
+                    {%- if variant == current_variant %} selected="selected" {%- endif -%}
+            >
+              {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+            </option>
+            {% endfor %}
+          </select>
+
+
+
+          {% if section.settings.show_quantity_selector %}
+          <div class="product-form__controls-group quantity-selector">
+            <label for="updates_large_{{ product.id }}">{{ 'products.product.quantity' | t }}:</label>
+            <div class="product-form__item plus-minus-input">
+              <div class="input-group-button plus">
+                <button type="button" data-quantity="plus" data-field="updates_large_{{ product.id }}" data-quantity-button-desktop>+</button>
+              </div>
+              <div class="input-group-button minus">
+                <button type="button" data-quantity="minus" data-field="updates_large_{{ product.id }}" data-quantity-button-desktop>-</button>
+              </div>
+              <input type="number" id="updates_large_{{ product.id }}"
+                     name="quantity" value="1" min="1" pattern="[0-9]*"
+                     class="product-form__input product-form__input--quantity" data-quantity-input
+              >
+            </div>
+          </div>
+          {% endif %}
+
+          {% comment %}
+          <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden{% if section.settings.enable_payment_button %} product-form__error-message-wrapper--has-payment-button{% endif %}"
+               data-error-message-wrapper
+               role="alert"
+          >
+            <span class="hidden">{{ 'general.accessibility.error' | t }} </span>
+            {% include 'icon' with 'error' %}
+            <span class="product-form__error-message" data-error-message>{{ 'products.product.quantity_minimum_message' | t }}</span>
+          </div>
+          {% endcomment %}
+
+          <div class="product-form__controls-group product-form__controls-group--submit">
+            <div class="product-form__item product-form__item--submit
+                {%- if section.settings.enable_payment_button %} product-form__item--payment-button {%- endif -%}
+                {%- if product.has_only_default_variant %} product-form__item--no-variants {%- endif -%}"
+            >
+              <button type="submit" name="add"
+                      {% unless current_variant.available %} aria-disabled="true"{% endunless %}
+                      aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
+                      class="btn product-form__cart-submit{% if section.settings.enable_payment_button %} btn--secondary-accent{% endif %}"
+                      data-add-to-cart
+                      {% unless current_variant.available %} disabled{% endunless %} >
+
+                <span class="product-form__cart-submit__text">
+                  {% include 'icon' with 'cart-element-1' %}
+                  {% include 'icon' with 'cart-element-2' %}
+
+                  {% include 'icon' with 'cart' %}
+
+                  {% include 'icon' with 'tick' %}
+
+                  <span data-add-to-cart-text>
+                    {% unless current_variant.available %}
+                      {{ 'products.product.sold_out' | t }}
+                    {% else %}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {% endunless %}
+                  </span>
+                </span>
+
+                <span class="hidden" data-loader>
+                  {% include 'icon' with 'spinner' %}
+                </span>
+              </button>
+
+              {% if section.settings.enable_payment_button %}
+              {{ form | payment_button }}
+              {% endif %}
+            </div>
+          </div>
+          <!--Loop Final Sale line item property-->  
+          {% if product.tags contains "final-sale" %}  
+            <input type="hidden" name="properties[_LPROP]" value="Final Sale">
+          {% endif %}
+          {% endform %}
+
+          <!-- Swym button on product pages -->
+          <div class="swym-wishlist-button-bar"></div>
+          <!-- Swym button on product pages -->
+
+          <div class="clear"></div>
+        </div>
+
+        {%- comment -%}
+        Live region for announcing updated price and availability to screen readers
+        {%- endcomment -%}
+        <p class="hidden" data-product-status
+           aria-live="polite"
+           role="status"
+        ></p>
+
+        {%- comment -%}
+        Live region for announcing that the product form has been submitted and the
+        product is in the process being added to the cart
+        {%- endcomment -%}
+        <p class="hidden" data-loader-status
+           aria-live="assertive"
+           role="alert"
+           aria-hidden="true"
+        >{{ 'products.product.loader_label' | t }}</p>
+
+        {% if product.type != 'Gift Card' %}
+        <div class="product-single__summary__info">
+          <h3>{{ 'products.product.description' | t }}{% include 'icon' with 'plus' %}{% include 'icon' with 'minus' %}</h3>
+          <div>
+          {% if product.has_only_default_variant == true %}
+            <div class="description">
+              {{ product.metafields.ChannelAdvisor.ChildDescription | replace:'<b>','<strong>' | replace:'</b>','</strong>' | replace:'</strong>  ','</strong>' | replace:'</strong> ','</strong>' | replace:'<br>','' }}
+            </div>
+          {% else %}
+            {% for variant in product.variants %}
+              <div id="variant-{{ variant.id }}-details" class="description {% if variant == current_variant %}block{% else %}hidden{% endif %} ">
+                {{ variant.metafields.ChannelAdvisor.ChildDescription | replace:'<b>','<strong>' | replace:'</b>','</strong>' | replace:'</strong>  ','</strong>' | replace:'</strong> ','</strong>' | replace:'<br>','' }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          </div>
+
+          <h3>{{ 'products.product.shipping_delivery' | t }}{% include 'icon' with 'plus' %}{% include 'icon' with 'minus' %}</h3>
+          <div>{{ section.settings.shipping_delivery }}</div>
+
+          <h3>{{ 'products.product.returns_exchanges' | t }}{% include 'icon' with 'plus' %}{% include 'icon' with 'minus' %}</h3>
+          
+          {% comment %}
+          <div>{{ section.settings.returns_exchanges }}<br/>
+             For more information <a href="#showHideContentid" class="onClickShowHide js--tag__popup">click here</a> 
+          </div>
+          {% endcomment %}
+          
+          
+            {% if product.tags contains 'final-sale' %}
+              <div>Please note that items marked as final sale are not eligible for returns. For additional information <a href="#showHideContentid" class="onClickShowHide js--tag__popup">click here</a> </div>
+            {% else %}
+              <div>We want you to be completely happy with your purchase! If for any reason you are not happy with your purchase, we will gladly accept returns. For more information <a href="#showHideContentid" class="onClickShowHide js--tag__popup">click here</a> </div>
+              {% comment %}<div>{{ section.settings.returns_exchanges }}</div>{% endcomment %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+  
+  <script type="searchspring/personalized-recommendations" profile="similar">
+    seed = "{{ product.variants[0].sku }}";
+  </script>
+  <script type="searchspring/personalized-recommendations" profile="cross-sell">
+    seed = "{{ product.variants[0].sku }}";
+  </script>
+      
+  {% if product.type != 'Gift Card' %}
+    {%comment%}
+      {% render 'okendo-reviews-widget', product: product %}
+    {%endcomment%}
+    <div class="stjr-product-review-page" data-product-id="{{ product.selected_or_first_available_variant.sku|default:product.selected_or_first_available_variant.id|string }}" data-group="item_group" data-group-value="{{product.id}}"></div>
+  {% endif %}
+
+  <script type="searchspring/personalized-recommendations" profile="recently-viewed"></script>
+      
+</div>
+
+{% unless product == empty %}
+<script type="application/json" id="ProductJson-{{ section.id }}">
+  {{ product | json }}
+</script>
+<script type="application/json" id="ModelJson-{{ section.id }}">
+  {{ product.media | where: 'media_type', 'model' | json }}
+</script>
+{% endunless %}
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+      $('.js--tag__popup').magnificPopup({
+        type:'inline',
+        midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+      });
+        $('.js--tag__popup').on('click',function(e){
+            var that = $(this),
+                id = that.attr('data-id');
+            $('.tag--popup--item').removeClass('active');
+            $('.tag--popup--item[data-id="'+ id +'"]').addClass('active');
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% schema %}
+{
+  "name": "Product pages",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_payment_button",
+      "label": "Show dynamic checkout button",
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Media",
+      "info": "Learn more about [media types](https://help.shopify.com/manual/products/product-media)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Accordion"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_delivery",
+      "label": "Shipping & delivery"
+    },
+    {
+      "type": "richtext",
+      "id": "returns_exchanges",
+      "label": "Returns & exchanges"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Tag Name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name_tag",
+          "label": "Name Tag"
+        },
+        {
+          "type": "text",
+          "id": "text_tag",
+          "label": "Text Tag",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

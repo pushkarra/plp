@@ -1,0 +1,201 @@
+{%- assign max_height = 263 -%}
+
+<div data-section-id="{{ section.id }}">
+  {%- if section.blocks.size > 0 -%}
+  <div class="products-block container">
+
+    {%- assign title = section.settings.title -%}
+
+    {% assign tab_1 = section.settings.tab_1 %}
+    {% assign tab_2 = section.settings.tab_2 %}
+    {% assign tab_3 = section.settings.tab_3 %}
+    {% assign tab_4 = section.settings.tab_4 %}
+    {% assign tab_5 = section.settings.tab_5 %}
+
+    <div class="flex flex-wrap lg:-mx-4 pb-10">
+      <div id="products-block-tabs" class="w-full text-center lg:px-4">
+        <h1 class="h2">{{ title }}</h1>
+
+        <ul id="tabs-menu">
+          {% if tab_1 != blank %}<li><a href="#tabs-1">{{ tab_1 }}</a></li>{% endif %}
+          {% if tab_2 != blank %}<li><a href="#tabs-2">{{ tab_2 }}</a></li>{% endif %}
+          {% if tab_3 != blank %}<li><a href="#tabs-3">{{ tab_3 }}</a></li>{% endif %}
+          {% if tab_4 != blank %}<li><a href="#tabs-4">{{ tab_4 }}</a></li>{% endif %}
+          {% if tab_5 != blank %}<li><a href="#tabs-5">{{ tab_5 }}</a></li>{% endif %}
+        </ul>
+        <div id="tabs-1">
+          <ul class="products slider">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product_1' -%}
+                {%- assign product = all_products[block.settings.product] -%}
+
+                {%- if product != blank -%}
+                  <li>
+                    {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: true, show_wishlist: true %}
+                  </li>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+        <div id="tabs-2">
+          <ul class="products slider">
+          </ul>
+        </div>
+        <div id="tabs-3">
+          <ul class="products slider">
+          </ul>
+        </div>
+        <div id="tabs-4">
+          <ul class="products slider">
+          </ul>
+        </div>
+        <div id="tabs-5">
+          <ul class="products slider">
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {%- endif -%}
+</div>
+
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json" id="products-tab">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Products",
+    "products": [
+    {%- for block in section.blocks -%}
+      {
+        "type" : "{{ block.type }}",
+        "product" : "{{ block.settings.product }}"
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+    ]
+  }
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Products Block with Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "text",
+      "id": "tab_1",
+      "label": "Tab 1"
+    },
+    {
+      "type": "text",
+      "id": "tab_2",
+      "label": "Tab 2"
+    },
+    {
+      "type": "text",
+      "id": "tab_3",
+      "label": "Tab 3"
+    },
+    {
+      "type": "text",
+      "id": "tab_4",
+      "label": "Tab 4"
+    },
+    {
+      "type": "text",
+      "id": "tab_5",
+      "label": "Tab 5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_1",
+      "name": "Product (1 Tab)",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "product_2",
+      "name": "Product (2 Tab)",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "product_3",
+      "name": "Product (3 Tab)",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "product_4",
+      "name": "Product (4 Tab)",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "product_5",
+      "name": "Product (5 Tab)",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products Block with Tabs",
+      "category": "Products",
+      "blocks": [
+        {
+          "type": "product_1"
+        },
+        {
+          "type": "product_2"
+        },
+        {
+          "type": "product_3"
+        },
+        {
+          "type": "product_4"
+        },
+        {
+          "type": "product_5"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

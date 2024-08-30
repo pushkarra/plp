@@ -1,0 +1,26 @@
+
+{% section 'collection-template' %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "ItemList",
+    "url": {{ shop.url | append: collection.url | json }},
+    "itemListElement":[
+      {% for product in collection.products %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "url": {{ shop.url | append: product.url | json }},
+        "name": {{ product.title | json }},
+        {%- if product.featured_media -%}
+        "image": [
+          {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+        ],
+        {%- endif -%}
+        "description": {{ product.description | strip_html | json }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  }
+</script>

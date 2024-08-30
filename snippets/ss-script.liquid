@@ -1,0 +1,20 @@
+{%- if collection.handle -%}
+    {% capture ss_collection_attr %} collection="{{ collection.id }}" collection-name="{{ collection.title }}" collection-handle="{{ collection.handle }}"{% endcapture %}
+{%- endif -%}
+ 
+{%- if current_tags -%}
+    {% capture ss_tags_attr %} tags="{{ current_tags | join: '|' }}"{% endcapture %}
+{%- endif -%}
+ 
+{%- if template -%}
+    {% capture ss_template_attr %} template="{{ template }}"{% endcapture %}
+{%- endif -%}
+ 
+{%- if template == 'search.shop' or collection.handle -%}
+    {% capture ss_hide_attr %} hide-content="#searchspring-sidebar, #searchspring-content"{% endcapture %}
+{%- else -%}
+    {% assign ss_defer_attr = ' defer' %}
+{%- endif -%}
+ 
+{% comment %}Searchspring Script{% endcomment %}
+<script src="//cdn.searchspring.net/search/v3/lts/searchspring.catalog.js?twxmeg"{{ ss_collection_attr }}{{ ss_tags_attr }}{{ ss_template_attr }}{{ ss_hide_attr }}{{ ss_defer_attr }}></script>

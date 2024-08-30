@@ -1,0 +1,59 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="container pt-10 lg:pt-0 mb-20" data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+
+    <div class="flex flex-wrap text-center block-after-slider">
+    {%- for block in section.blocks -%}
+      {%- assign block_image = block.settings.image -%}
+      {%- assign block_text = block.settings.text -%}
+
+      {% if block_image != blank and block_text != blank %}
+        <div class="w-1/2 lg:w-3/12 px-2">
+          <img src="{{ block_image | img_url: 'master' }}" alt="{{ block_image.alt | escape }}" class="inline-block">
+          {{ block_text }}
+        </div>
+      {% endif %}
+
+    {%- endfor -%}
+    </div>
+
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "After Slider",
+  "max_blocks": 4,
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "After Slider",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

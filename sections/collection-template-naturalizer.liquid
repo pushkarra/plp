@@ -1,0 +1,317 @@
+<div data-section-id="{{ section.id }}" data-section-type="collection-template">
+  <div class="container" id="Collection">
+    {% if section.settings.show_welcome %}
+    <div class="flex flex-wrap relative mt-4 mb-10" id="welcome-banner">
+      <div class="w-full md:w-1/2 lgshop:w-1/2 pb-2 md:pb-0 md:pr-2 text-center">
+        {%- assign welcome_image_1 = section.settings.welcome_image_1 -%}
+        {%- assign welcome_image_2 = section.settings.welcome_image_2 -%}
+        {% if welcome_image_1 != blank %}
+        <img src="{{ welcome_image_1 | img_url: 'master' }}" alt="{{ welcome_image_1.alt }}">
+        {% endif %}
+      </div>
+
+      <div class="w-full md:w-1/2 lgshop:w-1/2 md:pl-2 text-center">
+        {% if welcome_image_2 != blank %}
+        <img src="{{ welcome_image_2 | img_url: 'master' }}" alt="{{ welcome_image_2.alt }}">
+        {% endif %}
+
+        <div class="mt-10 md:mt-0 absolute text-center" id="welcome-banner__text">
+          {%- assign welcome_logo = section.settings.welcome_logo -%}
+          {% if welcome_logo != blank %}
+          <img src="{{ welcome_logo | img_url: 'master' }}" alt="{{ welcome_logo.alt }}">
+          {% endif %}
+
+          {%- assign welcome_title = section.settings.welcome_title -%}
+          <span class="h1">
+            {% if welcome_title != blank %}
+              {{ welcome_title }}
+            {% else %}
+              {{ collection.title }}
+            {% endif %}
+          </span>
+
+          {%- assign welcome_text = section.settings.welcome_text -%}
+          {% if welcome_text != blank %}
+          <p>{{ welcome_text | slice: 0, 300 }}</p>
+          {% endif %}
+
+          {%- assign welcome_button_text_1 = section.settings.welcome_button_text_1 -%}
+          {%- assign welcome_button_link_1 = section.settings.welcome_button_link_1 -%}
+          {%- assign welcome_button_text_2 = section.settings.welcome_button_text_2 -%}
+          {%- assign welcome_button_link_2 = section.settings.welcome_button_link_2 -%}
+          {%- assign welcome_button_text_3 = section.settings.welcome_button_text_3 -%}
+          {%- assign welcome_button_link_3 = section.settings.welcome_button_link_3 -%}
+          <ul class="{% if welcome_button_link_1 and welcome_button_link_2 and welcome_button_link_3 %} buttons-3 {% endif %} {% if welcome_button_link_1 and welcome_button_link_2 or welcome_button_link_3 %} buttons-2{% endif %}">
+            {% if welcome_button_link_1 %}<li><a href="{{ welcome_button_link_1 }}" class="btn btn-primary">{{ welcome_button_text_1 }}</a></li>{% endif %}
+            {% if welcome_button_link_2 %}<li><a href="{{ welcome_button_link_2 }}" class="btn btn-primary">{{ welcome_button_text_2 }}</a></li>{% endif %}
+            {% if welcome_button_link_3 %}<li><a href="{{ welcome_button_link_3 }}" class="btn btn-primary">{{ welcome_button_text_3 }}</a></li>{% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if section.settings.show_category %}
+    <div class="flex flex-wrap mb-10 mt-4 md:mt-0">
+      <div class="w-full" id="shop-by-category">
+        {%- assign category_title = section.settings.category_title -%}
+        <h2 class="text-center mt-3 mb-0">{{ category_title }}</h2>
+        {%- if section.blocks.size > 0 -%}
+        <ul id="shop-by-category__banners" {%- if section.blocks.size < 6 -%}class="textLeft"{%- endif -%}>
+        {%- for block in section.blocks -%}
+        {%- assign category_image = block.settings.category_image -%}
+        {%- assign category_title = block.settings.category_title -%}
+        {%- assign category_link = block.settings.category_link -%}
+        <li>
+          <a href="{{ category_link }}">
+            <span><img src="{{ category_image | img_url: '180x180', crop: 'center', scale: 2 }}" alt="{{ category_image.alt }}"></span>
+            <p><strong>{{ category_title }}</strong></p>
+          </a>
+        </li>
+        &#32;
+        {%- endfor -%}
+        </ul>
+        {%- endif -%}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if section.settings.show_feature %}
+    <div class="flex flex-wrap mb-20">
+      <div class="w-full md:w-1/2 lgshop:w-1/2 mb-10 md:mb-0 md:pr-2">
+        <h2 class="mb-4">{{ section.settings.feature_title }}</h2>
+        {{ section.settings.feature_text }}
+        <br>
+        {%- assign feature_link = section.settings.feature_link -%}
+        <a href="{{ section.settings.feature_link }}" class="btn btn-transparent">Shop Now</a>
+      </div>
+      <div class="w-full md:w-1/2 lgshop:w-1/2 md:pl-2">
+        {%- assign feature_image = section.settings.feature_image -%}
+        {% if feature_image != blank %}
+        <a href="{{ section.settings.feature_link }}">
+          <img src="{{ feature_image | img_url: 'master' }}" alt="{{ feature_image.alt }}">
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="flex flex-wrap lgshop:flex-no-wrap -mx-4">
+      <div class="w-full lgshop:w-3/12 mx-4">
+        <h1 class="collection-title">
+          {% if welcome_title != blank %}
+            {{ welcome_title }}
+          {% else %}
+            {{ collection.title }}
+          {% endif %}
+        </h1>
+        <div id="searchspring-sidebar"></div>
+      </div>
+
+      <div class="w-full lgshop:w-9/12 collection-products-block mx-4">
+        {% if section.settings.show_collection_image and collection.image %}
+        <div class="collection-hero">
+          <div class="collection-hero__image ratio-container lazyload js"
+               data-bgset="{% include 'bgset', image: collection.image %}"
+               data-sizes="auto"
+               data-parent-fit="cover"
+               style="background-image: url('{{ collection.image | img_url: '300x300' }});"></div>
+          <noscript>
+            <div class="collection-hero__image" style="background-image: url({{ collection.image | img_url: '2048x600', crop: 'top' }});"></div>
+          </noscript>
+        </div>
+        {% endif %}
+
+        <div id="searchspring-content"></div>
+        {% assign info = collection.metafields.info %}
+        {% if info.description != blank %}
+        <div class="collection-addition-info">
+          {{ info.description }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Naturalizer",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Welcome banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_welcome",
+      "label": "Show welcome",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "welcome_image_1",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "welcome_image_2",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "welcome_logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "welcome_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "welcome_text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "welcome_button_text_1",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "welcome_button_link_1",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "welcome_button_text_2",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "welcome_button_link_2",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "welcome_button_text_3",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "welcome_button_link_3",
+      "label": "Button link"
+    },
+
+    {
+      "type": "header",
+      "content": "Shop by Category"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show category",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "category_title",
+      "label": "Title"
+    },
+
+    {
+      "type": "header",
+      "content": "Feature"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_feature",
+      "label": "Show feature",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "feature_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_text",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "feature_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_image",
+      "label": "Image"
+    },
+
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "link_list",
+      "id": "linklist",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendors",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_enable",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tags_enable",
+      "label": "Enable tag filtering",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Shop by category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "category_image",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "category_title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "category_link",
+          "label": "Link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

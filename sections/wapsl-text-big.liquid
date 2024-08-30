@@ -1,0 +1,44 @@
+{%- assign image = section.settings.image -%}
+{%- assign title = section.settings.title -%}
+{%- assign subtitle = section.settings.subtitle -%}
+{%- assign text = section.settings.text -%}
+
+<div data-section-id="{{ section.id }}">
+  <div class="text-block-big" style="background-image: url({{ image | img_url: 'master' }})">
+    <div class="flex flex-wrap justify-center text-center">
+      <div class="w-full lg:w-6/12">
+        <h2>{{ title }}</h2>
+        {{ text }}
+        <h3>{{ subtitle }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ]
+}
+{% endschema %}

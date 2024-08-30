@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+  <meta name="referrer" content="origin">
+
+  <title>{{ page_title }}</title>
+
+  {{ content_for_header }}
+
+  {{ checkout_stylesheets }}
+  {{ checkout_scripts }}
+
+  <!--Route Code Edited 12/16/2021-->
+  <script type="text/javascript" src="https://cdn.routeapp.io/route-widget-shopify/v2/route-widget-shopify-stable-v2.min.js"></script>
+  <style>
+    .route-widget {
+      justify-content: flex-end !important;
+    }
+    .route-div::after{
+      content: "Things happen. Add Route for an extra layer of protection\A against lost/stolen or damaged orders.";
+      white-space: pre-wrap;
+      display: inline-block;
+    }
+    .route-div{
+      text-align: right;
+    }
+  </style>
+  <!--End Route Code-->
+
+  <!-- Google Tag Manager -->
+<!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N4SF27G');</script> -->
+<!-- End Google Tag Manager -->
+
+  <!-- Google Tag Manager -->
+  <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PXG5H3C');</script> -->
+  <!-- End Google Tag Manager -->
+</head>
+<body>
+{{ skip_to_content_link }}
+
+<header class="banner" data-header role="banner">
+  <div class="wrap">
+    {{ content_for_logo }}
+  </div>
+</header>
+
+{{ order_summary_toggle }}
+<div class="content" data-content>
+  <div class="wrap">
+    <div class="main">
+      <header class="main__header" role="banner">
+        {{ content_for_logo }}
+        {{ breadcrumb }}
+        {{ alternative_payment_methods }}
+      </header>
+      <main class="main__content" role="main">
+        {{ content_for_layout }}
+
+        <!--Route Code Edited 3/10/2021-->
+        <div class="route-div" style="margin-top: 10px;"></div>
+        <!--End Route Code-->
+
+        <!-- <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/BV6dg2kAFEwl-EFzFAIfCw" async></script>
+        <div class="yotpo-widget-instance" data-yotpo-instance-id="63431"></div> -->
+
+        <div class="shipping-info">
+          <p>Please refer to our <a href="https://www.bhfo.com/pages/shipping" target="_blank" class="underline">Shipping</a> page for guidance on shipping restrictions and delivery expectations.</p>
+        </div>
+
+      </main>
+      <footer class="main__footer" role="contentinfo">
+        {{ content_for_footer }}
+      </footer>
+    </div>
+    <aside class="sidebar" role="complementary">
+      <div class="sidebar__header">
+        {{ content_for_logo }}
+      </div>
+      <div class="sidebar__content">
+        {{ content_for_order_summary }}
+      </div>
+    </aside>
+  </div>
+</div>
+
+{{ tracking_code }}
+<script type="text/javascript">
+usi_installed = 0; USI_installCode = function() { if (usi_installed == 0) { usi_installed = 1; var USI_headID = document.getElementsByTagName("head")[0]; var USI_installID = document.createElement('script'); USI_installID.type = 'text/javascript'; USI_installID.src = 'https://www.upsellit.com/active/bhfo.jsp'; USI_headID.appendChild(USI_installID); } }; if (typeof(document.readyState) != "undefined" && document.readyState === "complete") { USI_installCode(); } else if (window.addEventListener){ window.addEventListener('load', USI_installCode, true); } else if (window.attachEvent) { window.attachEvent('onload', USI_installCode); } else { USI_installCode(); } setTimeout("USI_installCode()", 10000);
+</script>
+</body>
+</html>

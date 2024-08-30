@@ -1,0 +1,81 @@
+<div data-section-id="{{ section.id }}">
+  <section class="py-3 md:py-10 text-center rewards-text">
+    <div class="container">
+      <h2 class="mb-8">{{ section.settings.title_1 }}</h2>
+      {{ section.settings.text_1 }}
+
+      {% if customer %}
+        <a href="/" class="btn btn-secondary big">Shop Now</a>
+      {% else %}
+        <a href="/account/" class="btn btn-secondary big">Join Now</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="gray py-3 md:py-10 rewards-text">
+    <h2 class="text-center">{{ section.settings.title_2 }}</h2>
+
+    <div class="rewards-faq">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign question = block.settings.question -%}
+        {%- assign answer = block.settings.answer -%}
+
+        <div>
+          <h3>{{ question }}{% include 'icon' with 'plus' %}{% include 'icon' with 'minus' %}</h3>
+          <div>{{ answer }}</div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Block 3",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text_1",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "FAQ"
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+    "type": "text",
+    "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

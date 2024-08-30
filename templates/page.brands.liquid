@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+
+  <div class="flex flex-wrap">
+    <div class="w-full page-content mb-6">
+      <h1 class="text-center">{{ page.content }}</h1>
+
+      {% comment %} Capture Alphabet in Array {% endcomment %}
+      {% capture alphabet %}a-b-c-d-e-f-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z{% endcapture %}
+      {% assign letters = alphabet | split: '-' %}
+      <p class="brand-nav text-center">
+        {% for letter in letters %}
+        <a href="#{{letter}}" title="Brands starting with letter {{letter | upcase}}">{{letter | upcase}}</a>
+        {% endfor %}
+        <a href="#other" title="Other brands">#</a>
+      </p><!-- .brand-nav -->
+
+      <ul class="brand-list">
+        {% for letter in letters %}
+          <li>
+            <h2 id="{{letter}}" name="{{letter}}" title="Brands starting with letter {{letter | upcase}}">{{letter | upcase}}</h2>
+
+            <ul>
+            {% for vendor in shop.vendors %}
+
+              {% assign first_letter = vendor | downcase | truncate: 1, '' %}
+              {% if first_letter == letter %}
+                <li>{{ vendor | link_to_vendor }}</li>
+              {% endif %}
+
+            {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+
+        <li>
+          <h2 id="other" name="other" title="Other brands">#</h2>
+
+          <ul>
+          {% for vendor in shop.vendors %}
+
+            {% assign first_letter = vendor | downcase | truncate: 1, '' %}
+            {% assign first_letter_match = false %}
+
+            {% for letter in letters %}
+              {% if first_letter == letter %}
+                {% assign first_letter_match =  true %}
+              {% endif %}
+            {% endfor %}
+
+            {% if first_letter_match != true %}
+              {% comment %}<li>{{ vendor | link_to_vendor }}</li> {% endcomment %}
+              <li><a href="/collections/vendors?q={{ vendor }}" title ="{{ vendor }}" aria-label="Click '{{ vendor }}' vendor link to see this vendor collection">{{ vendor }}</a></li>
+            {% endif %}
+
+          {% endfor %}
+          </ul>
+        </li>
+      </ul><!-- .brand-list -->
+    </div>
+  </div>
+</div>

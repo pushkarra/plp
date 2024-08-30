@@ -1,0 +1,31 @@
+{%- assign title = section.settings.title -%}
+{%- assign text = section.settings.text -%}
+
+<div data-section-id="{{ section.id }}">
+  <div class="container text-block md:mb-16 lg:mb-16">
+    <div class="flex flex-wrap justify-center text-center">
+      <div class="w-full lg:w-7/12">
+        <h2>{{ title }}</h2>
+        {{ text }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,155 @@
+
+<div data-section-id="{{ section.id }}">
+  <div class="image-block-double container mb-4">
+
+    {%- assign ib_text = section.settings.ib_text -%}
+    {%- assign ib_info_text = section.settings.ib_info_text -%}
+
+    {%- assign ls_image_desktop = section.settings.ls_image_desktop -%}
+    {%- assign ls_collection_info = section.settings.ls_collection_info -%}
+    {%- assign ls_collection_title = section.settings.ls_collection_title -%}
+    {%- assign ls_link_title = section.settings.ls_link_title -%}
+    {%- assign ls_link = section.settings.ls_link -%}
+
+    {%- assign rs_image_desktop = section.settings.rs_image_desktop -%}
+    {%- assign rs_collection_info = section.settings.rs_collection_info -%}
+    {%- assign rs_collection_title = section.settings.rs_collection_title -%}
+    {%- assign rs_link_title = section.settings.rs_link_title -%}
+    {%- assign rs_link = section.settings.rs_link -%}
+
+    <div class="flex flex-wrap image-block-double__info mb-16">
+      <div class="w-full text-center">
+        <div class="image-block-double__info__big-text">{{ ib_text }}</div>
+        <p>{{ ib_info_text }}</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap sm:-mx-2">
+      <div class="w-full sm:w-6/12 px-4 sm:px-2 mb-12 lg:mb-2 sm:mb-0">
+        {% if ls_link != blank %}<a href="{{ ls_link }}">{% endif %}
+        <span class="image-block-double__image">
+          {% if ls_image_desktop != blank %}
+          {% assign img_url = ls_image_desktop | img_url: '1x1' | replace: '_1x1.', '_600x.' %}
+          <img
+            src="{{ ls_image_desktop | img_url: '355x' }}"
+            data-src="{{ img_url }}"
+            data-widths="[284, 355, 568, 600]"
+            data-aspectratio="1.0"
+            data-sizes="auto"
+            alt="{{ ls_image_desktop.alt }}"
+            class="inline-block lazyload">
+          {% endif %}
+        </span>
+        <p>{{ ls_collection_info }}</p>
+        <h3 class="h2 mb-0">{{ ls_collection_title }}</h3>
+        {% if ls_link != blank %}<span class="nodecoration withArrow">{{ ls_link_title }}</span></a>{% endif %}
+      </div>
+      <div class="w-full sm:w-6/12 px-4 sm:px-2 mb-12 lg:mb-2 sm:mb-0">
+        {% if rs_link != blank %}<a href="{{ rs_link }}">{% endif %}
+        <span class="image-block-double__image">
+        {% if ls_image_desktop != blank %}
+          {% assign img_url = rs_image_desktop | img_url: '1x1' | replace: '_1x1.', '_600x.' %}
+          <img
+            src="{{ rs_image_desktop | img_url: '355x' }}"
+            data-src="{{ img_url }}"
+            data-widths="[284, 355, 568, 600]"
+            data-aspectratio="1.0"
+            data-sizes="auto"
+            alt="{{ rs_image_desktop.alt }}"
+            class="inline-block lazyload">
+          {% endif %}
+        </span>
+        <p>{{ rs_collection_info }}</p>
+        <h3 class="h2 mb-0">{{ rs_collection_title }}</h3>
+        {% if rs_link != blank %}<span class="nodecoration withArrow">{{ rs_link_title }}</span></a>{% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image Block Double",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "richtext",
+      "id": "ib_text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "ib_info_text",
+      "label": "Info Text"
+    },
+    {
+      "type": "header",
+      "content": "Left Side"
+    },
+    {
+      "type": "image_picker",
+      "id": "ls_image_desktop",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ls_collection_info",
+      "label": "Collection Info"
+    },
+    {
+      "type": "text",
+      "id": "ls_collection_title",
+      "label": "Collection Title"
+    },
+    {
+      "type": "text",
+      "id": "ls_link_title",
+      "label": "Link Title"
+    },
+    {
+      "type": "url",
+      "id": "ls_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Right Side"
+    },
+    {
+      "type": "image_picker",
+      "id": "rs_image_desktop",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "rs_collection_info",
+      "label": "Collection Info"
+    },
+    {
+      "type": "text",
+      "id": "rs_collection_title",
+      "label": "Collection Title"
+    },
+    {
+      "type": "text",
+      "id": "rs_link_title",
+      "label": "Link Title"
+    },
+    {
+      "type": "url",
+      "id": "rs_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Block Double",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

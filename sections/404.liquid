@@ -1,0 +1,226 @@
+{%- assign title = section.settings.title -%}
+{%- assign sub_title = section.settings.sub_title -%}
+{%- assign categories_title = section.settings.categories_title -%}
+
+{%- assign category_1_image = section.settings.category_1_image -%}
+{%- assign category_1_link = section.settings.category_1_link -%}
+{%- assign category_1_title = section.settings.category_1_title -%}
+{%- assign category_1_subtitle = section.settings.category_1_subtitle -%}
+
+{%- assign category_2_image = section.settings.category_2_image -%}
+{%- assign category_2_link = section.settings.category_2_link -%}
+{%- assign category_2_title = section.settings.category_2_title -%}
+{%- assign category_2_subtitle = section.settings.category_2_subtitle -%}
+
+{%- assign category_3_image = section.settings.category_3_image -%}
+{%- assign category_3_link = section.settings.category_3_link -%}
+{%- assign category_3_title = section.settings.category_3_title -%}
+{%- assign category_3_subtitle = section.settings.category_3_subtitle -%}
+
+{%- assign sign_up_title = section.settings.sign_up_title -%}
+{%- assign sign_up_text = section.settings.sign_up_text -%}
+
+
+<div class="flex flex-wrap">
+  <div class="w-full text-center">
+    <h1 class="h2">{{ title }}</h1>
+    <h2 class="h1">{{ sub_title }}</h2>
+  </div>
+</div>
+
+<script type="searchspring/personalized-recommendations" profile="404"></script>
+
+<div class="flex flex-wrap pt-20 md:-mx-4 overflow-x-hidden">
+  <div class="w-full text-center">
+    <h3>{{ categories_title }}</h3>
+  </div>
+
+  <div class="w-full md:w-4/12 text-center md:px-4">
+    {% if category_1_link != blank %} <a href="{{ category_1_link }}"> {% endif %}
+    <img src="{{ category_1_image | img_url: 'master' }}" alt="{{ category_1_title }}" class="inline-block">
+    <h4 class="h2 mt-4">{{ category_1_title }}</h4>
+    <p>{{ category_1_subtitle }}</p>
+    {% if category_1_link != blank %} </a> {% endif %}
+  </div>
+  <div class="w-full md:w-4/12 text-center md:px-4">
+    {% if category_2_link != blank %} <a href="{{ category_2_link }}"> {% endif %}
+    <img src="{{ category_2_image | img_url: 'master' }}" alt="{{ category_2_title }}" class="inline-block">
+    <h4 class="h2 mt-4">{{ category_2_title }}</h4>
+    <p>{{ category_2_subtitle }}</p>
+    {% if category_2_link != blank %} </a> {% endif %}
+  </div>
+  <div class="w-full md:w-4/12 text-center md:px-4">
+    {% if category_3_link != blank %} <a href="{{ category_3_link }}"> {% endif %}
+    <img src="{{ category_3_image | img_url: 'master' }}" alt="{{ category_3_title }}" class="inline-block">
+    <h4 class="h2 mt-4">{{ category_3_title }}</h4>
+    <p>{{ category_3_subtitle }}</p>
+    {% if category_3_link != blank %} </a> {% endif %}
+  </div>
+</div>
+
+<div class="flex flex-wrap py-20">
+  <div class="w-full text-center">
+    <div class="sign-up">
+      <h5 class="h2">{{ sign_up_title }}</h5>
+      <p>{{ sign_up_text }}</p>
+
+      {%- assign formId = 'ContactFooter' -%}
+      {% form 'customer', id: formId, novalidate: 'novalidate' %}
+      {%- if form.posted_successfully? -%}
+      <p class="form-message form-message--success" tabindex="-1" data-form-status>
+        {{ 'general.newsletter_form.confirmation' | t }}
+      </p>
+      {%- endif -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="input-group {% if form.errors %} input-group--error{% endif %}">
+        <input type="email"
+               name="contact[email]"
+               id="{{ formId }}-email"
+               class="input-group__field newsletter__input{% if form.errors %} input--error{% endif %}"
+               value="{{ form.email }}"
+               placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+               aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+               aria-required="true"
+               required
+               autocorrect="off"
+               autocapitalize="off"
+               {% if form.errors %}
+               aria-invalid="true"
+               aria-describedby="{{ formId }}-email-error"
+               data-form-status
+               {% endif %}>
+        <span class="input-group__btn">
+          <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">{{ 'general.newsletter_form.submit' | t }}</button>
+        </span>
+      </div>
+      {% if form.errors contains 'email' %}
+        <span id="{{ formId }}-email-error" class="input-error-message">
+          <span class="visually-hidden">{{ 'general.accessibility.error' | t }}</span>
+          <span class="site-footer__newsletter-error">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+        </span>
+      {% endif %}
+      {% endform %}
+      <div class="clear-both"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let newURL = window.location.pathname;
+  let p = newURL.includes("products");
+  let productTitle = newURL.replace('/products/','').replaceAll('-',' ');
+  if(p) jQuery('h1.h2').text('"'+ productTitle +'" was recently sold out.');
+</script>
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "sub_title",
+      "label": "SubTitle"
+    },
+    {
+      "type": "header",
+      "content": "Categories"
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Category 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_1_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "category_1_subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "header",
+      "content": "Category 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_2_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "category_2_subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "header",
+      "content": "Category 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "category_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "category_3_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "category_3_subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "header",
+      "content": "Sign Up"
+    },
+    {
+      "type": "text",
+      "id": "sign_up_title",
+      "label": "Sign Up Title"
+    },
+    {
+      "type": "richtext",
+      "id": "sign_up_text",
+      "label": "Sign Up Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+{%- assign title = section.settings.title -%}
+
+<div id="cart-product-recomendation" class="product-recommendations container pt-12" data-section-id="{{ section.id }}">
+  <div class="flex">
+    <div class="w-full pb-6">
+      <span class="h2 title-block">{{ title }}</span>
+    </div>
+  </div>
+
+  <div class="flex">
+    <div class="w-full">
+      <ul class="products flex flex-wrap slider">
+        {% assign min = 1 %}
+        {% assign max = 40 %}
+        {% assign diff = max | minus: min %}
+        {% assign randomNumber = "now" | date: "%N" | modulo: diff | plus: min %}
+        {% for product in collections.all.products limit: 8 offset: randomNumber %}
+          <li class="w-1/5">
+            {% include 'product-card-grid', max_height: 317, product: product, show_wishlist: true %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": "Complete your cart",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    }
+  ]
+}
+{% endschema %}

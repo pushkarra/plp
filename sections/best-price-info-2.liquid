@@ -1,0 +1,78 @@
+<section data-section-id="{{ section.id }}">
+  <div class="gray best-price-info pt-8 lg:pt-20 pb-4 lg:pb-10">
+    <div class="container min">
+      {%- if section.blocks.size > 0 -%}
+      <div class="flex flex-wrap">
+        {%- for block in section.blocks -%}
+          {%- assign icon = block.settings.icon -%}
+          {%- assign title_small = block.settings.title_small -%}
+          {%- assign title = block.settings.title -%}
+
+          <div class="w-full lg:w-1/2 best-price-info__element min pb-10 lg:pr-20">
+            <img src="{{ icon | img_url: 'master' }}" alt="">
+            <small class="inline-block">{{ title_small }}</small>
+            <h4>{{ title }}</h4>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="best-price-info-content py-8 lg:py-20 text-center">
+    <div class="container">
+      <div class="flex">
+        <div class="w-full">
+          <h5>{{ section.settings.title_small }}</h5>
+          <h5 class="h2">{{ section.settings.title }}</h5>
+          <a href="/collections/all" class="btn btn-secondary">Shop all products</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Info",
+  "settings": [
+    {
+      "type": "header",
+      "content": "After Blocks"
+    },
+    {
+      "type": "text",
+      "id": "title_small",
+      "label": "Title (Small)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title_small",
+          "label": "Title (Small)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

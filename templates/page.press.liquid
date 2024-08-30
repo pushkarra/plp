@@ -1,0 +1,19 @@
+
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+
+  <div class="flex flex-wrap">
+    <div class="w-full page-content mb-6">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="w-full page-content press">
+      <div class="flex flex-wrap sm:-mx-2">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>

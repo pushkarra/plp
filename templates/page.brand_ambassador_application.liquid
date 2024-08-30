@@ -1,0 +1,74 @@
+
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+
+  <div class="flex flex-wrap justify-center page-content">
+    <div class="w-full lg:w-10/12 text-center">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="w-full lg:w-10/12">
+      <div class="brand-form-application">
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+        <p class="form-success">
+          {{ 'contact.form.post_success' | t }}
+        </p>
+        {% endif %}
+        {{ form.errors | default_errors }}
+        <div class="flex flex-wrap lg:-mx-2">
+          <div class="w-full mb-4 lg:px-2">
+            <input type="text" class="contactFormText" id="Form-{{ section.id }}-full_name" name="contact[full_name]" placeholder="{{ 'contact.form.full_name' | t }}" autocapitalize="words" value="" />
+          </div>
+          <div class="w-full mb-4 lg:px-2">
+            <input type="email" class="contactFormEmail" id="Form-{{ section.id }}-email" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" />
+          </div>
+          <div class="w-full lg:w-3/12 mb-4 lg:px-2">
+            <select name="contact[age]" id="">
+              <option value="">Age</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+          <div class="w-full lg:w-9/12 mb-4 lg:px-2">
+            <input type="text" class="contactFormInstagram" id="Form-{{ section.id }}-instagram" name="contact[instagram]" placeholder="{{ 'contact.form.instagram' | t }}" autocorrect="off" autocapitalize="off" />
+          </div>
+          <div class="w-full mb-4 lg:px-2">
+            <p class="mb-4"><strong>What is the focus of your platform?</strong></p>
+            <input type="checkbox" id="Form-{{ section.id }}-platform_1" name="contact[platform_1]" /><label for="Form-{{ section.id }}-platform_1">Fashion</label>
+            <input type="checkbox" id="Form-{{ section.id }}-platform_2" name="contact[platform_2]" /><label for="Form-{{ section.id }}-platform_2">Lifestyle</label>
+            <input type="checkbox" id="Form-{{ section.id }}-platform_3" name="contact[platform_3]" /><label for="Form-{{ section.id }}-platform_3">Fitness</label>
+            <input type="checkbox" id="Form-{{ section.id }}-platform_4" name="contact[platform_4]" /><label for="Form-{{ section.id }}-platform_4">Foodie</label>
+          </div>
+          <div class="w-full mb-4 lg:px-2">
+            <p class="mb-4"><strong>How many Followers do you have on Instagram?</strong></p>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_1" name="contact[finstagram_1]" /><label for="Form-{{ section.id }}-finstagram_1">1-500</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_2" name="contact[finstagram_2]" /><label for="Form-{{ section.id }}-finstagram_2">500-1K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_3" name="contact[finstagram_3]" /><label for="Form-{{ section.id }}-finstagram_3">1K-3K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_4" name="contact[finstagram_4]" /><label for="Form-{{ section.id }}-finstagram_4">3K-6K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_5" name="contact[finstagram_5]" /><label for="Form-{{ section.id }}-finstagram_5">6K-10K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_6" name="contact[finstagram_6]" /><label for="Form-{{ section.id }}-finstagram_6">10K-20K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_7" name="contact[finstagram_7]" /><label for="Form-{{ section.id }}-finstagram_7">20K-40K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_8" name="contact[finstagram_8]" /><label for="Form-{{ section.id }}-finstagram_8">40K-80K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-finstagram_9" name="contact[finstagram_9]" /><label for="Form-{{ section.id }}-finstagram_9">100K+</label>
+          </div>
+          <div class="w-full mb-4 lg:px-2">
+            <p class="mb-4"><strong>What is your average amount of likes on Instagram?</strong></p>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_1" name="contact[aainstagram_1]" /><label for="Form-{{ section.id }}-aainstagram_1">0-100</label>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_2" name="contact[aainstagram_2]" /><label for="Form-{{ section.id }}-aainstagram_2">200-500</label>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_3" name="contact[aainstagram_3]" /><label for="Form-{{ section.id }}-aainstagram_3">500-1K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_4" name="contact[aainstagram_4]" /><label for="Form-{{ section.id }}-aainstagram_4">1K-5K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_5" name="contact[aainstagram_5]" /><label for="Form-{{ section.id }}-aainstagram_5">5K-10K</label>
+            <input type="checkbox" id="Form-{{ section.id }}-aainstagram_6" name="contact[aainstagram_6]" /><label for="Form-{{ section.id }}-aainstagram_6">10K+</label>
+          </div>
+          <div class="w-full mb-4 lg:px-2 text-center">
+            <input type="submit" class="btn btn-third" value="{{ 'contact.form.submit' | t }}">
+          </div>
+        </div>
+      {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

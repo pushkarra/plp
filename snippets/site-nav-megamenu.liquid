@@ -1,0 +1,56 @@
+{% if ref != blank %}
+  {% assign var_ref = '?ref=' | append: ref %}
+{% endif %}
+
+{%- assign has_megamenu = false -%}
+{%- assign megamenu = '' -%}
+{%- capture megamenu -%}
+{%- if section.blocks.size > 0 -%}
+  {%- for block in section.blocks -%}
+    {%- assign item = 'submenu-' | append: n -%}
+
+    {%- if item == block.type -%}
+      {%- assign has_megamenu = true -%}
+      {%- assign title = block.settings.title -%}
+      {%- assign banner = block.settings.banner -%}
+      {%- assign banner_link = block.settings.banner_link -%}
+
+      {% if banner == blank %}
+        <li class="mm-{{ block.type }}{% if title != blank %} megamenu-border{% endif %}">
+          <span>{{ title }}</span>
+          <ul>
+            {%- for i in (1..10) -%}
+              {%- assign title_key = i | prepend: 'title_' -%}
+              {%- assign url_key = i | prepend: 'url_' -%}
+              {%- assign title = block.settings[title_key] -%}
+              {%- assign url = block.settings[url_key] -%}
+
+              {%- if title != blank or url != blank -%}
+                <li>
+                  <a href="{{ url | append: var_ref }}" aria-label="{{ title }} menu">
+                    {{ title }}
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+
+          {%- assign title_additional = block.settings.title_additional_link -%}
+          {%- assign url_additional = block.settings.url_additional_link -%}
+          {% if title_additional and url_additional %}
+            <a href="{{ url_additional | append: var_ref }}" class="addition-link" aria-label="{{ title_additional }} menu">{{ title_additional }}</a>
+          {% endif %}
+        </li>
+      {% else %}
+        <li class="mm-{{ block.type }} megamenu-banner">
+          {% if banner_link != blank %}<a href="{{ banner_link }}">{% endif %}
+          <img src="{{ banner | img_url: 'master' }}" alt="">
+          {% if banner_link != blank %}</a>{% endif %}
+        </li>
+      {% endif %}
+
+    {%- endif -%}
+
+  {%- endfor -%}
+{%- endif -%}
+{%- endcapture -%}

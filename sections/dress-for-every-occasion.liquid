@@ -1,0 +1,146 @@
+<div id="{{ section.id }}" class="container pt-8">
+  <div class="text-center shop-by-category-heading">{{ section.settings.sectionheading }}</div>
+  <div class="text-center shop-by-category-subheading">{{ section.settings.sectionsubheading }}</div>
+          <div class="dress-for-every-occassion-wrapper">
+              <div class="text-center">
+                    <a href="{{ section.settings.link1 }}"><img src="{{ section.settings.image1 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+                    <a href="{{ section.settings.link1 }}" class="linktitle">{{ section.settings.link1title }}</a> 
+              </div>
+              <div class="text-center">
+                  <a href="{{ section.settings.link2 }}"><img src="{{ section.settings.image2 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+                  <a href="{{ section.settings.link2 }}" class="linktitle">{{ section.settings.link2title }}</a> 
+              </div>
+              <div class="text-center">
+                  <a href="{{ section.settings.link3 }}"><img src="{{ section.settings.image3 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+                  <a href="{{ section.settings.link3 }}" class="linktitle">{{ section.settings.link3title }}</a> 
+              </div>
+              <div class="text-center">
+                  <a href="{{ section.settings.link4 }}"><img src="{{ section.settings.image4 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+                  <a href="{{ section.settings.link4 }}" class="linktitle">{{ section.settings.link4title }}</a> 
+              </div>
+         </div>
+</div>
+
+  <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="slick/slick.min.js"></script> -->
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+          $('.dress-for-every-occassion-wrapper').slick({
+            arrows: true,
+            dots:false,
+            infinite: false,
+            speed: 300,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            responsive: [
+                {
+                  breakpoint: 600,
+                  settings: {
+                    arrows: true,
+                    dots:false,
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    centerMode: true,
+                    variableWidth: true
+                  }
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    arrows: true,
+                    dots:false,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    centerMode: true,
+                    variableWidth: true
+                  }
+                }
+              ]
+          });  
+    });
+  </script>
+
+{% schema %}
+  {
+    "name": "Dress for Every Occassion",
+    "settings": [
+      {
+        "type":"text",
+        "id":"sectionheading",
+        "label":"Heading"
+      },
+      {
+        "type":"text",
+        "id":"sectionsubheading",
+        "label":"Sub Heading"
+      },
+      {
+        "type":"image_picker",
+        "id":"image1",
+        "label": "Image 1"
+      },
+      {
+        "type":"text",
+        "id":"link1title",
+        "label":"Link 1 Title"
+      },
+      {
+        "type":"url",
+        "id":"link1",
+        "label": "Link 1"
+      },
+      {
+        "type":"image_picker",
+        "id":"image2",
+        "label": "Image 2"
+      },
+      {
+        "type":"text",
+        "id":"link2title",
+        "label":"Link 2 Title"
+      },
+      {
+        "type":"url",
+        "id":"link2",
+        "label": "Link 2"
+      },
+      {
+        "type":"image_picker",
+        "id":"image3",
+        "label": "Image 3"
+      },
+      {
+        "type":"text",
+        "id":"link3title",
+        "label":"Link 3 Title"
+      },
+      {
+        "type":"url",
+        "id":"link3",
+        "label": "Link 3"
+      },
+      {
+        "type":"image_picker",
+        "id":"image4",
+        "label": "Image 4"
+      },
+      {
+        "type":"text",
+        "id":"link4title",
+        "label":"Link 4 Title"
+      },
+      {
+        "type":"url",
+        "id":"link4",
+        "label": "Link 4"
+      }
+    ],
+    "presets": [
+      {
+        "name":"Dress for Every Occassion"
+      }
+    ]
+  }
+{% endschema %}  

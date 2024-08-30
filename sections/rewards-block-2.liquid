@@ -1,0 +1,75 @@
+<section class="beige py-3 md:py-10">
+  <div class="container">
+    <div class="flex flex-wrap justify-center text-center">
+      <div class="w-full lg:w-9/12">
+        <h2>{{ section.settings.title_1 }}</h2>
+        {{ section.settings.text_1 }}
+        <div class="flex flex-wrap mt-10 how-to-earn justify-center">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- assign icon = block.settings.icon -%}
+            {%- assign title = block.settings.title -%}
+            {%- assign points = block.settings.points -%}
+
+            <div class="w-full sm:w-1/2 md:w-4/12 pb-16">
+              <img src="{{ icon | img_url: 'master' }}" alt="">
+              <p>{{ title }}</p>
+              <p><b>{{ points }}</b></p>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+        </div>
+        {% if customer %}
+          <a href="/" class="btn btn-secondary big">Shop Now</a>
+        {% else %}
+          <a href="/account/" class="btn btn-secondary big">Join Now</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Block 2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text_1",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "points",
+          "label": "Points"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

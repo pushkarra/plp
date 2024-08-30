@@ -1,0 +1,80 @@
+<div class="container pb-20">
+  <div class="flex pt-6 pb-10">
+    <div class="w-full">
+      <h1>{{ 'customer.account.title' | t }}</h1>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap lg:-mx-4">
+    <div class="w-full lg:w-3/12 lg:px-4 pb-4">
+      {% include 'account-info' %}
+
+      <ul class="account-nav">
+        <li class="orders current">{% include 'icon' with 'cart' %}<a href="/account/">{{ 'customer.account.view_orders' | t }}{% include 'icon' with 'arrow' %}</a></li>
+        <li class="addresses">{% include 'icon' with 'pin' %}<a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t }}{% include 'icon' with 'arrow' %}</a></li>
+        <li class="logout">{% include 'icon' with 'logout' %}{{ 'layout.customer.log_out' | t | customer_logout_link }}</li>
+      </ul>
+    </div>
+    <div class="w-full lg:w-9/12 lg:px-4">
+      {% comment %}
+      <div class="yotpo-widget-instance" data-yotpo-instance-id="66542"></div>
+      {% endcomment %}
+
+      <div class="myaccount-content">
+        {% if customer.orders.size != 0 %}
+        <div class="myaccount-content__title">
+          <div class="flex">
+            <div class="w-full pb-4">
+              <h2 class="h3">{{ 'customer.orders.title' | t }}</h2>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="myaccount-content__body py-4">
+          {% paginate customer.orders by 20 %}
+          {% if customer.orders.size != 0 %}
+
+            <table class="responsive-table" width="100%">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'customer.orders.order_number' | t }}</th>
+                  <th scope="col">{{ 'customer.orders.date' | t }}</th>
+                  <th scope="col">{{ 'customer.orders.payment_status' | t }}</th>
+                  <th scope="col" class="hidden">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                  <th scope="col">{{ 'customer.orders.total' | t }}</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for order in customer.orders %}
+              <tr>
+                <th data-label="{{ 'customer.orders.order_number' | t }}" scope="row">
+                  <a href="{{ order.customer_url }}" class="btn btn--secondary btn--small" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">{{ order.name }}</a>
+                </th>
+                <td data-label="{{ 'customer.orders.date' | t }}">{{ order.created_at | time_tag: format: 'date' }}</td>
+                <td data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+                <td data-label="{{ 'customer.orders.fulfillment_status' | t }}" class="hidden">{{ order.fulfillment_status_label }}</td>
+                <td data-label="{{ 'customer.orders.total' | t }}">{{ order.total_price | money }}</td>
+                <td class="text-right"><a href="{{ order.customer_url }}" class="btn btn-primary">view</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% else %}
+
+            <div class="no-orders text-center">
+              <a href="/collections/all" class="btn btn-secondary">MAKE YOUR FIRST ORDER</a>
+            </div>
+
+          {% endif %}
+          {%- if paginate.pages > 1 -%}
+            {% include 'pagination', paginate: paginate %}
+          {%- endif -%}
+          {% endpaginate %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

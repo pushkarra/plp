@@ -1,0 +1,25 @@
+
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+
+  <div class="flex flex-wrap lg:-mx-4">
+    <div class="w-full lg:w-3/12 lg:px-4 pb-4">
+      <nav class="sitebar__nav" role="navigation">
+        <ul>
+          {%- for link in linklists.page-sidebar.links -%}
+          {%- assign toplevel = true -%}
+          {% include 'site-nav' %}
+          {%- endfor -%}
+        </ul>
+      </nav>
+    </div>
+    <div class="w-full lg:w-9/12 lg:px-4 pb-4 page-content">
+      <h1>{{ page.title }}: <span></span></h1>
+      {{ page.content }}
+    </div>
+  </div>
+</div>

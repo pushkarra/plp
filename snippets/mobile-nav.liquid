@@ -1,0 +1,128 @@
+{%- liquid 
+   assign main_menu = linklists[section.settings.main_linklist_mobile] 
+-%}
+
+<div id="navWrapper">
+{%- for link in main_menu.links -%}
+{% assign cat_name = link.title | downcase  %} 
+  <nav class="mobile-nav-wrapper lg:hidden" role="navigation" section-name="{{ link.title | downcase }}">
+        {% unless linklists[section.settings.main_linklist] == blank %}
+            <button type="button" class="site-header__menu js-mobile-nav-toggle mobile-nav--open lg:hidden" aria-controls="MobileNav"  aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+              {% include 'icon' with 'hamburger' %}
+              {% include 'icon' with 'close' %}
+            </button>
+        {% endunless %}
+        <!-- <div class="mobile-nav__item"><span>Shop by category</span></div> -->
+        <div class="mobile-menu-l1">
+          {%- for link in main_menu.links -%}
+                 <button class="main-menu-l1Link" section-name="{{ link.title | downcase }}">{{- link.title -}}</button>
+           {%- endfor -%}
+        </div>
+         {%- liquid
+           assign subMenuNav = 'main-menu-' | append: cat_name
+           assign subNav = linklists[subMenuNav]
+        -%}
+   
+      <ul id="MobileNav" class="mobile-nav">
+        {% for link in linklists[subMenuNav].links %}
+        {%- assign outerLoopIndex = forloop.index -%}
+
+        <li class="mobile-nav__item">
+          {% if link.links != blank %}
+          {% capture child_list_handle %}{{ link.handle }}-{{ outerLoopIndex }}{% endcapture %}
+          <button type="button" class="btn--link js-toggle-submenu mobile-nav__link{% if link.child_active %} mobile-nav__link--active{% endif %}" data-target="{{ child_list_handle }}" data-level="1" aria-expanded="false">
+            <span class="mobile-nav__label">{{ link.title | escape }}</span>
+            <div class="mobile-nav__icon">
+              {% include 'icon' with 'arrow' %}
+            </div>
+          </button>
+          <ul class="mobile-nav__dropdown" data-parent="{{ child_list_handle }}" data-level="2">
+            <li class="mobile-nav__item">
+              <div class="mobile-nav__table">
+                <div class="mobile-nav__table-cell mobile-nav__return">
+                  <button class="btn--link js-toggle-submenu mobile-nav__return-btn" type="button" aria-expanded="true" aria-label="{{ link.title }}">
+                    {% include 'icon' with 'arrow' %}
+                  </button>
+                </div>
+                <span class="mobile-nav__sublist-link mobile-nav__sublist-header mobile-nav__sublist-header--main-nav-parent">
+                      <span class="mobile-nav__label">{{ link.title | escape }}</span>
+                    </span>
+              </div>
+            </li>
+
+            {% for childlink in link.links %}
+            <li class="mobile-nav__item">
+              {% if childlink.links != blank %}
+              {% capture grandchild_list_handle %}{{ childlink.handle }}-{{ outerLoopIndex }}-{{ forloop.index }}{% endcapture %}
+              <button type="button" class="btn--link js-toggle-submenu mobile-nav__link mobile-nav__sublist-link" data-target="{{ grandchild_list_handle }}" aria-expanded="false">
+                <span class="mobile-nav__label">{{ childlink.title | escape }}</span>
+                <div class="mobile-nav__icon">
+                  {% include 'icon' with 'arrow' %}
+                </div>
+              </button>
+              <ul class="mobile-nav__dropdown" data-parent="{{ grandchild_list_handle }}" data-level="3">
+                <li class="mobile-nav__item">
+                  <div class="mobile-nav__table">
+                    <div class="mobile-nav__table-cell mobile-nav__return">
+                      <button type="button" class="btn--link js-toggle-submenu mobile-nav__return-btn" data-target="{{ child_list_handle }}" aria-expanded="true" aria-label="{{ childlink.title }}">
+                        {% include 'icon' with 'arrow' %}
+                      </button>
+                    </div>
+                    <a href="{{ childlink.url }}"
+                       class="mobile-nav__sublist-link mobile-nav__sublist-header"
+                       {% if childlink.current %} aria-current="page"{% endif %}
+                    >
+                      <span class="mobile-nav__label">{{ childlink.title | escape }}</span>
+                    </a>
+                  </div>
+                </li>
+                {% for grandchildlink in childlink.links %}
+                <li class="mobile-nav__item">
+                  <a href="{{ grandchildlink.url }}"
+                     class="mobile-nav__sublist-link"
+                     {% if grandchildlink.current %} aria-current="page"{% endif %}
+                  >
+                    <span class="mobile-nav__label">{{ grandchildlink.title | escape }}</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <a href="{{ childlink.url }}"
+                 class="mobile-nav__sublist-link"
+                 {% if childlink.current %} aria-current="page"{% endif %}
+              >
+                <span class="mobile-nav__label">{{ childlink.title | escape }}</span>
+              </a>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <a href="{{ link.url }}"
+             class="mobile-nav__link{% if link.active %} mobile-nav__link--active{% endif %}"
+             {% if link.current %} aria-current="page"{% endif %}
+          >
+            <span class="mobile-nav__label">{{ link.title | escape }}</span>
+          </a>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+{% comment %}
+      <ul id="MobileNavAddition">
+        {%- for link in linklists[main_menu_linklist_top_bar].links -%}
+          {%- assign toplevel = true -%}
+          {% include 'site-nav' %}
+        {%- endfor -%}
+      </ul>
+{% endcomment %}
+      <div class="mobile-bottom-links">
+          <a href="/account/" class="site-header__account"><img src="https://cdn.shopify.com/s/files/1/0469/2737/files/account.png"> <span>My Account</span></a>
+          <a href="/account/" class="site-header__account"><img src="https://cdn.shopify.com/s/files/1/0469/2737/files/cs.jpg"> <span>Customer Service</span></a>
+          <a href="/account/" class="site-header__account"><img src="https://cdn.shopify.com/s/files/1/0469/2737/files/Orders.jpg"> <span>Orders & Returns</span></a>
+      </div>
+    </nav>
+{% endfor %}
+  </div>
+  

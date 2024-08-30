@@ -1,0 +1,115 @@
+
+<div data-section-id="{{ section.id }}">
+  {% comment %}
+  {%- assign templateHandle = request.page_type | handle -%}
+  {%- if templateHandle == 'index' -%}
+  <div class="container mb-8">
+    <div class="flex">
+      <div class="w-full">
+        <div class="nosto_element" id="frontpage-nosto-2"></div>
+      </div>
+    </div>
+  </div>
+  {%- endif -%}
+  {% endcomment %}
+
+  {%- if section.blocks.size > 0 -%}
+  <div class="brands-block container lg:mb-8 pt-10 lg:pt-0">
+
+    {%- assign title = section.settings.title -%}
+    {%- assign subtitle = section.settings.subtitle -%}
+    {%- assign section_link_title = section.settings.link_title -%}
+    {%- assign section_link = section.settings.link -%}
+
+    <div class="flex flex-wrap lg:-mx-4">
+      <div class="w-full text-center lg:px-4">
+        <h3 class="mb-10">{{ title }}</h3>
+
+        <ul class="slider">
+        {%- for block in section.blocks -%}
+          {%- assign image = block.settings.image -%}
+          {%- assign text = block.settings.text -%}
+          {%- assign link = block.settings.link -%}
+
+          <li>
+            {% if link != blank %}<a href="{{ link }}" title="Brand name">{% endif %}
+            {% if image != blank %}
+            <img src="{{ image | img_url: '264x120' }}" alt="{{ image.alt }}">
+            {% endif %}
+
+            <span>{{ text }}</span>
+            {% if link != blank %}</a>{% endif %}
+          </li>
+        {%- endfor -%}
+        </ul>
+
+        <a href="{{ section_link }}" class="btn btn-transparent mt-8">{{ section_link_title }}</a>
+      </div>
+    </div>
+
+  </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Brands Block",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "text",
+      "id": "link_title",
+      "label": "Link Title"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands Block",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

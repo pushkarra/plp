@@ -1,0 +1,134 @@
+{% comment %}
+The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+{% section 'product-template' %}
+
+<script>
+  // Override default values of shop.strings for each template.
+  // Alternate product templates can change values of
+  // add to cart button, sold out, and unavailable states here.
+  // theme.productStrings = {
+  //   addToCart: {{ 'products.product.add_to_cart' | t | json }},
+  //   soldOut: {{ 'products.product.sold_out' | t | json }},
+  //   unavailable: {{ 'products.product.unavailable' | t | json }}
+  // }
+</script>
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+<script type="application/ld+json" data-product-json>
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_media -%}
+  {%- assign media_size = product.featured_media.preview_image.width | append: 'x' -%}
+  "image": [
+  {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+  ],
+  {%- endif -%}
+  "description": {{ product.description | strip_html | json }},
+  {%- if current_variant.sku != blank -%}
+  "sku": {{ current_variant.sku | json }},
+  {%- endif -%}
+  "brand": {
+  "@type": "Thing",
+  "name": {{ product.vendor | json }}
+  },
+  "offers": [
+  {%- for variant in product.variants -%}
+  {
+  "@type" : "Offer",
+  {%- if variant.sku != blank -%}
+  "sku": {{ variant.sku | json }},
+  {%- endif -%}
+  "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+  "price" : {{ variant.price | divided_by: 100.00 | json }},
+  "priceCurrency" : {{ cart.currency.iso_code | json }},
+  "url" : {{ shop.url | append: variant.url | json }}
+  }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+  ]
+  {% if product.metafields.okendo.summaryData.reviewCount > 0 %}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ product.metafields.okendo.summaryData.reviewAverageValue }}",
+    "ratingCount": "{{ product.metafields.okendo.summaryData.reviewCount }}"
+  }
+  {% elsif product.metafields.okendo.ReviewCount > 0 %}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ product.metafields.okendo.ReviewAverageValue }}",
+    "ratingCount": "{{ product.metafields.okendo.ReviewCount }}"
+  }
+  {% endif %}
+  }
+</script>
+
+<script type="application/ld+json" data-product-slides-json>
+  {
+    "@context": "http://schema.org/",
+    "@type": "Slides",
+    "slides": [
+    {% for media in product.media %}
+    {
+    {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+      {%- assign media_video = media | video_tag: controls: true -%}
+      {% assign a = media_video | split: '<source src="' %}
+      {% assign b = a[2] | split: '" type="video/mp4">' %}
+      "image_thumbnail": "https:{{ 'img_thumbnail_video.svg' | asset_url }}",
+      "image_master": "https:{{ 'img_thumbnail_video_big.svg' | asset_url }}",
+      "image_zoom": "{{ b[0] }}",
+      "image_alt": "{{ media.alt | strip_html | escape | strip }}",
+      "type": "video"
+    {%- else -%}
+      "image_thumbnail": "{{ media.src | img_url: '320x320' }}",
+      "image_master": "{{ media.src | img_url: '688x688' }}",
+      "image_zoom": "{{ media.src | img_url: '1376x1376' }}",
+      "image_alt": "{{ media.alt | strip_html | escape | strip }}",
+      "type": "image"
+    {%- endif -%}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    ]
+  }
+</script>
+
+<script type="text/javascript">
+  var _learnq = _learnq || [];
+  var item = {
+    Name: {{ product.title|json }},
+  ProductID: {{ product.id|json }},
+  Categories: {{ product.collections|map:'title'|json }},
+  ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor|json }},
+  Price: {{ product.price|money|json }},
+  CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+  };
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+
+<!-- Searchspring IntelliSuggest Tracking -->
+<script type="text/javascript" src="//cdn.searchspring.net/intellisuggest/is.min.js"></script>
+<script type="text/javascript">
+try{
+    var product_code = "{{ product.variants[0].sku }}";
+    IntelliSuggest.init({siteId:"twxmeg", context:"Product/" + product_code, seed:product_code});    {% if customer %}        IntelliSuggest.setShopperId({{ customer.id }});    {% endif %}
+    IntelliSuggest.viewItem({sku:product_code});
+} catch(err) {}
+</script>
+<!-- END Searchspring IntelliSuggest -->

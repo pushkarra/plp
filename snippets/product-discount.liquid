@@ -1,0 +1,9 @@
+{% comment %}
+    Usage:
+    {% include 'product-discount', price: product.price, compare_at_price: product.compare_at_price %}
+{% endcomment %}
+{% assign divided_compare_at_price = compare_at_price | money_without_currency | remove: ',' | divided_by: 100 %}
+{% assign discount = price | money_without_currency | remove: ',' | divided_by: divided_compare_at_price | floor %}
+{% if discount < 96 %}
+{{ 100 | minus: discount }}% off
+{% endif %}

@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="flex">
+    <div class="w-full">
+      {% include 'breadcrumb' %}
+    </div>
+  </div>
+
+  <div class="flex flex-wrap lg:-mx-4">
+    <div class="w-full lg:w-1/2 lg:px-4 pb-4 page-contact-content">
+      {{ page.content }}
+
+      <div class="contact-page__info flex flex-wrap">
+        {% if settings.info_email != blank %}
+        <div class="contact-page__info__block w-full lg:w-1/2">
+          <span>Email us</span>
+          <a href="mailto:{{ settings.info_email }}">
+            {{ settings.info_email }}
+          </a>
+        </div>
+        {% endif %}
+
+        {% if settings.info_tollfree != blank %}
+        <div class="contact-page__info__block w-full lg:w-1/2">
+          <span>Toll free</span>
+          <a href="tel:{{ settings.info_phone }}">
+            {{ settings.info_tollfree }}
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if settings.info_customer_service_team != blank %}
+        <p>{{ settings.info_customer_service_team }}</p>
+      {% endif %}
+    </div>
+
+    <div class="w-full lg:w-1/2 lg:px-4 pb-4">
+      {% section 'contact-form' %}
+    </div>
+  </div>
+</div>

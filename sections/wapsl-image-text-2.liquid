@@ -1,0 +1,44 @@
+{%- assign image = section.settings.image -%}
+{%- assign title = section.settings.title -%}
+{%- assign text = section.settings.text -%}
+
+<div data-section-id="{{ section.id }}">
+  <div class="container mid image-and-text mb-32">
+    <div class="flex flex-wrap">
+      <div class="w-full lg:w-6/12 lg:pr-10 text-center lg:text-left order-2 lg:order-1">
+        {% if image != blank %}
+          <img src="{{ image | img_url: 'master' }}" alt="" class="inline-block">
+        {% else %}
+          <img src="{{ 'bhfo-video.gif' | asset_url }}" alt="" class="inline-block">
+        {% endif %}
+      </div>
+      <div class="w-full lg:w-6/12 lg:pl-10 order-1 lg:order-2 text-center lg:text-left">
+        <h2>{{ title }}</h2>
+        {{ text }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image & Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ]
+}
+{% endschema %}

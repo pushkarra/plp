@@ -1,0 +1,45 @@
+{% assign counter = 0 %}
+{% assign break_at = 10 %}
+{% assign current_product = product %}
+
+{%- assign heading = section.settings.heading -%}
+<div id="product-you-might-also-like" class="product-recommendations container pt-2 sm:pt-6 md:pt-10 lg:pt-16" data-base-url="{{ routes.product_recommendations_url }}" data-product-id="{{ product.id }}" data-limit="{{ break_at }}" data-section-id="{{ section.id }}" data-section-type="product-recommendations">
+  <div class="flex">
+    <div class="w-full pb-1 sm:pb-4 md:pb-6 lg:pb-12">
+      <span class="h2 title-block">{{ heading }}</span>
+    </div>
+  </div>
+
+  {% capture related_items %}
+  {% for product in recommendations.products %}
+    {% unless product.handle == current_product.handle %}
+      <li class="w-full xl:w-1/5">
+        {% include 'product-card-grid-nojs', max_height: 263, product: product, show_wishlist: true %}
+      </li>
+      {% assign counter = counter | plus: 1 %}
+      {% if counter == break_at %}
+        {% break %}
+      {% endif %}
+    {% endunless %}
+  {% endfor %}
+  {% endcapture %}
+
+  <ul class="products flex slider">
+    {{ related_items }}
+  </ul>
+</div>
+
+
+
+{% schema %}
+{
+  "name": "You might also like",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+{% section 'cart-template' %}
+
+<!-- Searchspring IntelliSuggest Tracking -->
+{% if cart.item_count > 0 %}
+<script type="text/javascript" src="//cdn.searchspring.net/intellisuggest/is.min.js"></script>
+<script type="text/javascript">
+try{ 
+    var seed = [];
+    {% for item in cart.items %}
+        seed.push("{{ item.product.variants[0].sku }}");
+    {% endfor %}
+    IntelliSuggest.init({siteId:"twxmeg", context:"Basket", seed:seed });    {% if customer %}        IntelliSuggest.setShopperId({{ customer.id }});     {% endif %}
+    {% for item in cart.items %}
+        IntelliSuggest.haveItem({sku:"{{ item.product.variants[0].sku }}", childSku:"{{ item.sku }}", qty:"{{ item.quantity }}", price:"{{ item.price | money_without_currency }}"});
+    {% endfor %}
+    IntelliSuggest.inBasket({});
+} catch(err) {}
+</script>
+{% endif %}
+<!-- END Searchspring IntelliSuggest -->

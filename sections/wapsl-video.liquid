@@ -1,0 +1,53 @@
+{%- assign image = section.settings.image -%}
+{%- assign title = section.settings.title -%}
+{%- assign text = section.settings.text -%}
+{%- assign video_link = section.settings.video_link -%}
+
+<div data-section-id="{{ section.id }}">
+  {% if image != blank %}
+  <div class="container mid wapsl-video-block mb-32">
+    <div class="flex flex-wrap">
+      <div class="w-full lg:w-6/12 lg:pr-10 order-2 lg:order-1 text-center">
+        <div class="wapsl-video-block__video">
+          <img src="{{ image | img_url: 'master' }}" alt="" class="inline-block">
+         {% if video_link != blank %}
+            <a href="{{ video_link }}" class="video-block__play mfp-iframe">{% include 'icon' with 'play2' %}</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="w-full lg:w-6/12 lg:pl-10 order-1 lg:order-2 text-center lg:text-left wapsl-video-block__text">
+        <h2>{{ title }}</h2>
+        {{ text }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "video_link",
+      "label": "Video Link"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ]
+}
+{% endschema %}

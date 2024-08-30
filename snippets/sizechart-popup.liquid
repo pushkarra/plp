@@ -1,0 +1,255 @@
+{% if gender == 'Women' %}
+  {% if type == 'women_shoes' %}
+    {% assign us = "4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5" | split:"," %}
+  {% else %}
+    {% assign us = "0,2,4,6,8,10,12,14,16" | split:"," %}
+  {% endif %}
+  {% assign int = "XXS,XS,S,M,L,XL,XXL,XXXL,XXXXL" | split:"," %}
+  {% assign jeans = "23,24,25,26,27,28,29,30,31,32,33,34,36,38,40" | split:"," %}
+{% elsif gender == 'Men' %}
+  {% if type == 'men_shoes' %}
+    {% assign us = "6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,14,14.5" | split:"," %}
+  {% else %}
+    {% assign us = "30,32,34,36,38,40,42,44,46" | split:"," %}
+  {% endif %}
+  {% assign int = "XS,S,M,L,XL,XXL,XXXL" | split:"," %}
+  {% assign jeans = "30,32,34,36,38,40" | split:"," %}
+{% endif %}
+
+{% for pdpSize in pdpSizes %}
+  {%- assign pdpSizeMod = pdpSize | remove: ' Medium ' | remove: '(B,M)' | remove: '(D)' -%}
+
+  {% if int contains pdpSizeMod %}
+    {% assign sizeXXS = 'XXS' %}
+    {% assign sizeXS = 'XS' %}
+    {% assign sizeS = 'S' %}
+    {% assign sizeM = 'M' %}
+    {% assign sizeL = 'L' %}
+    {% assign sizeXL = 'XL' %}
+    {% assign sizeXXL = 'XXL' %}
+    {% assign sizeXXXL = 'XXXL' %}
+    {% assign sizeXXXXL = 'XXXXL' %}
+  {% endif %}
+
+  {% if type == 'men_shoes' %}
+    {% if us contains pdpSizeMod %}
+      {% assign sizeXXS = '6' %}
+      {% assign sizeXXS2 = '6.5' %}
+      {% assign sizeXS = '7' %}
+      {% assign sizeXS2 = '7.5' %}
+      {% assign sizeS = '8' %}
+      {% assign sizeS2 = '8.5' %}
+      {% assign sizeM = '9' %}
+      {% assign sizeM2 = '9.5' %}
+      {% assign sizeL = '10' %}
+      {% assign sizeL2 = '10.5' %}
+      {% assign sizeXL = '11' %}
+      {% assign sizeXXL = '12' %}
+      {% assign sizeXXXL = '13' %}
+      {% assign sizeXXXXL = '14' %}
+    {% endif %}
+  {% elsif type == 'women_shoes' %}
+    {% if us contains pdpSizeMod %}
+      {% assign sizeXXS = '4' %}
+      {% assign sizeXXS2 = '4.5' %}
+      {% assign sizeXS = '5' %}
+      {% assign sizeXS2 = '5.5' %}
+      {% assign sizeS = '6' %}
+      {% assign sizeS2 = '6.5' %}
+      {% assign sizeM = '7' %}
+      {% assign sizeM2 = '7.5' %}
+      {% assign sizeL = '8' %}
+      {% assign sizeL2 = '8.5' %}
+      {% assign sizeXL = '9' %}
+      {% assign sizeXL2 = '9.5' %}
+      {% assign sizeXXL = '10' %}
+      {% assign sizeXXL2 = '10.5' %}
+      {% assign sizeXXXL = '11' %}
+      {% assign sizeXXXL2 = '11.5' %}
+      {% assign sizeXXXXL = '12' %}
+      {% assign sizeXXXXL2 = '12.5' %}
+    {% endif %}
+  {% else %}
+    {% if us contains pdpSizeMod %}
+      {% assign sizeXXS = '0' %}
+      {% assign sizeXS = '2' %}
+      {% assign sizeS = '4' %}
+      {% assign sizeM = '6' %}
+      {% assign sizeL = '8' %}
+      {% assign sizeXL = '10' %}
+      {% assign sizeXXL = '12' %}
+      {% assign sizeXXXL = '14' %}
+      {% assign sizeXXXXL = '16' %}
+    {% endif %}
+  {% endif %}
+
+  {% if gender == 'Women' %}
+    {% if type contains 'jeans' %}
+      {% if jeans contains pdpSizeMod %}
+        {% assign sizeXXS = '23' %}
+        {% assign sizeXS = '24' %}
+        {% assign sizeXS2 = '25' %}
+        {% assign sizeS = '26' %}
+        {% assign sizeS2 = '27' %}
+        {% assign sizeM = '28' %}
+        {% assign sizeM2 = '29' %}
+        {% assign sizeL = '30' %}
+        {% assign sizeL2 = '31' %}
+        {% assign sizeXL = '32' %}
+        {% assign sizeXL2 = '33' %}
+        {% assign sizeXXL = '34' %}
+        {% assign sizeXXL2 = '36' %}
+        {% assign sizeXXXL = '38' %}
+        {% assign sizeXXXXL = '40' %}
+      {% endif %}
+    {% endif %}
+  {% elsif gender == 'Men' %}
+    {% if type contains 'jeans' %}
+      {% if jeans contains pdpSizeMod %}
+        {% assign sizeXXS = '' %}
+        {% assign sizeXS = '' %}
+        {% assign sizeS = '30' %}
+        {% assign sizeM = '32' %}
+        {% assign sizeL = '34' %}
+        {% assign sizeXL = '36' %}
+        {% assign sizeXXL = '38' %}
+        {% assign sizeXXXL = '' %}
+        {% assign sizeXXXXL = '' %}
+      {% endif %}
+    {% endif %}
+
+    {% if type contains 'default' %}
+      {% if jeans contains pdpSizeMod %}
+        {% assign sizeXXS = '' %}
+        {% assign sizeXS = '' %}
+        {% assign sizeS = '46' %}
+        {% assign sizeM = '48' %}
+        {% assign sizeL = '50' %}
+        {% assign sizeXL = '52' %}
+        {% assign sizeXXL = '54' %}
+        {% assign sizeXXXL = '56' %}
+        {% assign sizeXXXXL = '' %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {% if type contains 'pants' %}
+    {% if jeans contains pdpSizeMod %}
+      {% assign sizeXXS = '' %}
+      {% assign sizeXS = '' %}
+      {% assign sizeS = '30' %}
+      {% assign sizeM = '32' %}
+      {% assign sizeL = '34' %}
+      {% assign sizeXL = '36' %}
+      {% assign sizeXXL = '38' %}
+      {% assign sizeXXXL = '40' %}
+      {% assign sizeXXXXL = '' %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+<div class="mfp-hide">
+  <div id="{{ id }}" class="popup-sizechart">
+    <div class="popup-sizechart__header">
+      <h3>size guide</h3>
+    </div>
+    <div class="popup-sizechart__lside">
+      <div class="popup-sizechart__lside__image">
+
+      </div>
+      <div class="popup-sizechart__lside__title">
+        {% if show_vendor and product.type != 'Gift Card' %}
+        <div class="product-single__vendor">{{ product.vendor | link_to_vendor }}</div>
+        {% endif %}
+
+        <h3 class="product-single__title">{{ product.title | remove: product.vendor | remove: 'Womens' | remove: "Women's" | remove: "Women`s" | remove: "Women’s" | remove: 'Mens' | remove: "Men's" | remove: 'Kids' }}</h3>
+      </div>
+    </div>
+    <div class="popup-sizechart__rside">
+      <h3>Size Information</h3>
+      <p>Unsure what your size is? Check here.</p>
+      <ul>
+        {% if xxs != blank %}
+          {% render 'sizechart-popup-element', value: xxs, size: sizeXXS, pdpSizes: pdpSizes %}
+
+          {% if sizeXXS2 != blank %}
+            {% if xxs2 == blank %} {% assign xxs2 = xxs %} {% endif %}
+            {% render 'sizechart-popup-element', value: xxs2, size: sizeXXS2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if xs != blank %}
+          {% render 'sizechart-popup-element', value: xs, size: sizeXS, pdpSizes: pdpSizes %}
+
+          {% if sizeXS2 != blank %}
+            {% if xs2 == blank %} {% assign xs2 = xs %} {% endif %}
+            {% render 'sizechart-popup-element', value: xs2, size: sizeXS2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if s != blank %}
+          {% render 'sizechart-popup-element', value: s, size: sizeS, pdpSizes: pdpSizes %}
+
+          {% if sizeS2 != blank %}
+            {% if s2 == blank %} {% assign s2 = s %} {% endif %}
+            {% render 'sizechart-popup-element', value: s2, size: sizeS2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if m != blank %}
+          {% render 'sizechart-popup-element', value: m, size: sizeM, pdpSizes: pdpSizes %}
+
+          {% if sizeM2 != blank %}
+            {% if m2 == blank %} {% assign m2 = m %} {% endif %}
+            {% render 'sizechart-popup-element', value: m2, size: sizeM2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if l != blank %}
+          {% render 'sizechart-popup-element', value: l, size: sizeL, pdpSizes: pdpSizes %}
+
+          {% if sizeL2 != blank %}
+            {% if l2 == blank %} {% assign l2 = l %} {% endif %}
+            {% render 'sizechart-popup-element', value: l2, size: sizeL2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if xl != blank %}
+          {% render 'sizechart-popup-element', value: xl, size: sizeXL, pdpSizes: pdpSizes %}
+
+          {% if sizeXL2 != blank %}
+            {% if xl2 == blank %} {% assign xl2 = xl %} {% endif %}
+            {% render 'sizechart-popup-element', value: xl2, size: sizeXL2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if xxl != blank %}
+          {% render 'sizechart-popup-element', value: xxl, size: sizeXXL, pdpSizes: pdpSizes %}
+
+          {% if sizeXXL2 != blank %}
+            {% if xxl2 == blank %} {% assign xxl2 = xxl %} {% endif %}
+            {% render 'sizechart-popup-element', value: xxl2, size: sizeXXL2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if xxxl != blank %}
+          {% render 'sizechart-popup-element', value: xxxl, size: sizeXXXL, pdpSizes: pdpSizes %}
+
+          {% if sizeXXXL2 != blank %}
+            {% if xxxl2 == blank %} {% assign xxxl2 = xxxl %} {% endif %}
+            {% render 'sizechart-popup-element', value: xxxl2, size: sizeXXXL2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+
+        {% if xxxxl != blank %}
+          {% render 'sizechart-popup-element', value: xxxxl, size: sizeXXXXL, pdpSizes: pdpSizes %}
+
+          {% if sizeXXXXL2 != blank %}
+            {% if xxxxl2 == blank %} {% assign xxxxl2 = xxxxl %} {% endif %}
+            {% render 'sizechart-popup-element', value: xxxxl2, size: sizeXXXXL2, pdpSizes: pdpSizes %}
+          {% endif %}
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>

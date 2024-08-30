@@ -1,0 +1,122 @@
+{%- assign max_height = 263 -%}
+
+<div data-section-id="{{ section.id }}">
+  {%- if section.blocks.size > 0 -%}
+  <div class="products-block container">
+
+    {%- assign title = section.settings.title -%}
+    {%- assign subtitle = section.settings.subtitle -%}
+    {%- assign text = section.settings.text -%}
+    {%- assign button_text = section.settings.button_text -%}
+    {%- assign button_url = section.settings.button_url -%}
+
+    <div class="flex flex-wrap lg:-mx-4 products-block__simple">
+      <div class="w-full lg:w-3/12 lg:px-4 text-center lg:text-left">
+        <small>{{ subtitle }}</small>
+        <h2>{{ title }}</h2>
+        <span class="hidden lg:inline-block">{{ text }}</span>
+        <a href="{{ button_url }}" class="btn btn-transparent hidden lg:inline-block">{{ button_text }}</a>
+      </div>
+      <div class="w-full lg:w-9/12 text-center lg:px-4" id="section-products-{{ section.id }}">
+        <ul class="products slider">
+          <img src="{{ 'ajax-loader.gif' | asset_url }}" alt="" class="inline-block">
+        </ul>
+        
+        <!-- <a href="{{ button_url }}" class="btn btn-transparent inline-block lg:hidden">{{ button_text }}</a> -->
+      </div>
+    </div>
+
+  </div>
+  {%- endif -%}
+
+  {% comment %}
+  {%- assign templateHandle = request.page_type | handle -%}
+  {% if templateHandle != 'blog' %}
+  <div class="container">
+    <div class="flex">
+      <div class="w-full">
+        <div class="nosto_element" id="frontpage-nosto-1"></div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endcomment %}
+
+</div>
+
+
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json" id="products-{{ section.id }}">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Products",
+    "products": [
+      {%- for block in section.blocks -%}
+        {
+          "type" : "{{ block.type }}",
+          "product" : "{{ block.settings.product }}"
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "Products Block",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "SubTitle"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_1",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products Block",
+      "category": "Products",
+      "blocks": [
+        {
+          "type": "product_1"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

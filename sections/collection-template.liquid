@@ -1,0 +1,102 @@
+<div data-section-id="{{ section.id }}" data-section-type="collection-template">
+  <div class="container" id="Collection">
+    <div class="flex">
+      <div class="w-full">
+        {% include 'breadcrumb' %}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap lgshop:flex-no-wrap -mx-4">
+      <div class="w-full lgshop:w-3/12 mx-4">
+        <h1 class="collection-title">
+          <span role="text">
+            <span class="hidden">{{ 'collections.general.collection_label' | t }}: </span>
+            {{ collection.title }}
+          </span>
+        </h1>
+        <div id="searchspring-sidebar"></div>
+      </div>
+      
+      <div class="w-full lgshop:w-9/12 collection-products-block mx-4">
+          {% if section.settings.show_collection_image and collection.image %}
+          <div class="collection-hero">
+            <div class="collection-hero__image ratio-container lazyload js"
+                 data-bgset="{% include 'bgset', image: collection.image %}"
+                 data-sizes="auto"
+                 data-parent-fit="cover"
+                 style="background-image: url('{{ collection.image | img_url: '300x300' }});"></div>
+            <noscript>
+              <div class="collection-hero__image" style="background-image: url({{ collection.image | img_url: '2048x600', crop: 'top' }});"></div>
+            </noscript>
+          </div>
+          {% endif %}
+
+		      <div class="collection-head">
+            {%- assign is_filter_by_available = false -%}
+            {%- if section.settings.tags_enable and collection.all_tags.size > 0 -%}
+              {%- assign is_filter_by_available = true -%}
+            {%- endif -%}
+
+            {% if collection.description != blank %}
+            <div class="collection-hero__description">
+              {{ collection.description }}
+            </div>
+            {% endif %}
+          </div>
+        
+        <div id="searchspring-content"></div>
+        {% assign info = collection.metafields.info %}
+        {% if info.description != blank %}
+        <div class="collection-addition-info">
+          {{ info.description }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection pages",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "link_list",
+      "id": "linklist",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendors",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_enable",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tags_enable",
+      "label": "Enable tag filtering",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

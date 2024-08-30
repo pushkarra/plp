@@ -1,0 +1,72 @@
+{%- assign title = section.settings.title -%}
+{%- assign link = section.settings.link -%}
+
+<div data-section-id="{{ section.id }}">
+  <div id="what-youll-do" class="text-block py-8">
+    <div class="container">
+      <div class="flex flex-wrap justify-center text-center">
+        <div class="w-full lg:w-10/12">
+          <h2>{{ title }}</h2>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-center text-center">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- assign image = block.settings.image -%}
+            {%- assign text = block.settings.text -%}
+            <div class="w-full lg:w-4/12">
+              {% if image != blank %}
+              <img src="{{ image | img_url: '192x192' }}" alt="{{ image.alt }}" class="inline-block mb-2">
+              {% endif %}
+             {{ text }}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      <div class="flex flex-wrap justify-center text-center mt-8">
+        <div class="w-full lg:w-10/12">
+          <a href="{{ link }}" class="btn btn-third big">APPLY TODAY</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "What you'll do",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

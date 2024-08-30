@@ -1,0 +1,138 @@
+<div class="shop-by-category container pt-8">
+  <div class="text-center shop-by-category-heading">{{ section.settings.sectionheading }}</div>
+      <div class="flex flex-wrap lg:-mx-4">
+        <div class="w-2/12 text-center">
+              <a href="{{ section.settings.link1 }}"><img src="{{ section.settings.image1 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+              <a href="{{ section.settings.link1 }}">{{ section.settings.link1title }}</a> 
+        </div>
+        <div class="w-2/12 text-center">
+            <a href="{{ section.settings.link2 }}"><img src="{{ section.settings.image2 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+            <a href="{{ section.settings.link2 }}">{{ section.settings.link2title }}</a> 
+        </div>
+        <div class="w-2/12 text-center">
+            <a href="{{ section.settings.link3 }}"><img src="{{ section.settings.image3 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+            <a href="{{ section.settings.link3 }}">{{ section.settings.link3title }}</a> 
+        </div>
+        <div class="w-2/12 text-center">
+            <a href="{{ section.settings.link4 }}"><img src="{{ section.settings.image4 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+            <a href="{{ section.settings.link4 }}">{{ section.settings.link4title }}</a> 
+        </div>
+        <div class="w-2/12 text-center">
+            <a href="{{ section.settings.link5 }}"><img src="{{ section.settings.image5 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+            <a href="{{ section.settings.link5 }}">{{ section.settings.link5title }}</a> 
+        </div>
+        <div class="w-2/12 text-center">
+            <a href="{{ section.settings.link6 }}"><img src="{{ section.settings.image6 | img_url:'200x'}}" style="width:100%;height:auto;"></a>
+            <a href="{{ section.settings.link6 }}">{{ section.settings.link6title }}</a> 
+        </div>
+      </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Shop by Category",
+    "settings": [
+      {
+        "type":"text",
+        "id":"sectionheading",
+        "label":"Heading"
+      },
+      {
+        "type":"image_picker",
+        "id":"image1",
+        "label": "Image 1"
+      },
+      {
+        "type":"text",
+        "id":"link1title",
+        "label":"Link 1 Title"
+      },
+      {
+        "type":"url",
+        "id":"link1",
+        "label": "Link 1"
+      },
+      {
+        "type":"image_picker",
+        "id":"image2",
+        "label": "Image 2"
+      },
+      {
+        "type":"text",
+        "id":"link2title",
+        "label":"Link 2 Title"
+      },
+      {
+        "type":"url",
+        "id":"link2",
+        "label": "Link 2"
+      },
+      {
+        "type":"image_picker",
+        "id":"image3",
+        "label": "Image 3"
+      },
+      {
+        "type":"text",
+        "id":"link3title",
+        "label":"Link 3 Title"
+      },
+      {
+        "type":"url",
+        "id":"link3",
+        "label": "Link 3"
+      },
+      {
+        "type":"image_picker",
+        "id":"image4",
+        "label": "Image 4"
+      },
+      {
+        "type":"text",
+        "id":"link4title",
+        "label":"Link 4 Title"
+      },
+      {
+        "type":"url",
+        "id":"link4",
+        "label": "Link 4"
+      },
+      {
+        "type":"image_picker",
+        "id":"image5",
+        "label": "Image 5"
+      },
+      {
+        "type":"text",
+        "id":"link5title",
+        "label":"Link 5 Title"
+      },
+      {
+        "type":"url",
+        "id":"link5",
+        "label": "Link 5"
+      },
+      {
+        "type":"image_picker",
+        "id":"image6",
+        "label": "Image 6"
+      },
+      {
+        "type":"text",
+        "id":"link6title",
+        "label":"Link 6 Title"
+      },
+      {
+        "type":"url",
+        "id":"link6",
+        "label": "Link 6"
+      },
+      
+    ],
+    "presets": [
+      {
+        "name":"Shop by Category"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,40 @@
+<div data-section-id="{{ section.id }}">
+  <section id="returns-exchanges-header" class="gray text-center">
+    <div class="container">
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <h1>{{ page.title }}</h1>
+        </div>
+      </div>
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <nav class="horizontal__nav" role="navigation">
+            {% include 'icon' with 'arrow' %}
+            <ul>
+              {%- for link in linklists.page-sidebar.links -%}
+              {%- assign toplevel = true -%}
+              {% include 'site-nav' %}
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="returns-exchanges-content" class="container pt-10 lg:pt-20 pb-16">
+    <div class="flex flex-wrap">
+      <div class="w-full">
+        {{ page.content }}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Content",
+  "settings": [
+  ]
+}
+{% endschema %}

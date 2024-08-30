@@ -1,0 +1,10 @@
+
+{% paginate search.results by 1 %}
+  {% if search.performed %}
+    {% for item in search.results %}
+      <li class="w-full xl:w-1/5">
+        {% include 'product-card-grid', max_height: 317, product: item %}
+      </li>
+    {% endfor %}
+  {% endif %}
+{% endpaginate %}

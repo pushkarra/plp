@@ -1,0 +1,84 @@
+{%- assign title = section.settings.title -%}
+{%- assign text = section.settings.text -%}
+{%- assign block_title = section.settings.block_title -%}
+
+<div data-section-id="{{ section.id }}">
+  <div class="container text-block mb-16">
+    <div class="flex flex-wrap justify-center text-center">
+      <div class="w-full lg:w-10/12">
+        <h2>{{ title }}</h2>
+        {{ text }}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center text-center">
+      <div class="w-full lg:w-10/12 mt-8">
+        <hr>
+        <h3 class="h2 my-8">{{ block_title }}</h3>
+
+        {%- if section.blocks.size > 0 -%}
+          <ul class="looking-for-list">
+            {%- for block in section.blocks -%}
+              {%- assign icon = block.settings.icon -%}
+              {%- assign text = block.settings.text -%}
+
+              <li>
+                {% if icon != blank %}
+                <img src="{{ icon | img_url: '96x96' }}" alt="{{ icon.alt }}">
+                {% endif %}
+
+                {{ text }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Blocks"
+    },
+    {
+      "type": "text",
+      "id": "block_title",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Looking for",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

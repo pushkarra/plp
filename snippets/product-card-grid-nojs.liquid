@@ -1,0 +1,91 @@
+{% comment %}
+Renders a product card using "Grid" style
+Accepts:
+- max_height: {Number} Maximum height of the product's image (required)
+- product: {Object} Product Liquid object (required)
+- show_vendor: {Boolean} Show the product's vendor depending on the section setting (optional)
+- show_wishlist: {Boolean} Show the wishlist icon (optional)
+
+Usage:
+{% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor, show_wishlist: true %}
+{% endcomment %}
+
+<div class="grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card">
+  <div class="grid-view-item__link-block">
+    <a class="grid-view-item__link" href="{{ product.url | within: collection }}">
+      <span class="hidden">{{ product.title }}</span>
+    </a>
+    <div class="stjr-product-rating" data-product-id="{{ product.selected_or_first_available_variant.sku|default:product.selected_or_first_available_variant.id }}"></div>
+    {% render 'okendo-reviews-product-rating-summary', product: product %}
+
+    {% capture img_id %}ProductCardImage-{{ section.id }}-{{ product.id }}{% endcapture %}
+    {% capture wrapper_id %}ProductCardImageWrapper-{{ section.id }}-{{ product.id }}{% endcapture %}
+    {%- assign preview_image = product.featured_media.preview_image -%}
+    {%- assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_317x317.' -%}
+    {%- assign current_variant = product.selected_or_first_available_variant -%}
+
+    {% unless preview_image == blank %}
+    {% include 'image-style', image: preview_image, height: max_height, wrapper_id: wrapper_id, img_id: img_id %}
+    {% endunless %}
+
+    <div class="product-card__image-with-placeholder-wrapper" data-image-with-placeholder-wrapper>
+      <div id="{{ wrapper_id }}" class="grid-view-item__image-wrapper product-card__image-wrapper">
+        <span><img id="{{ img_id }}"
+             src="{{ img_url }}"
+             class="grid-view-item__image lazyload"
+             alt="{{ preview_image.alt }}"
+             data-src="{{ img_url }}"
+             data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+             data-aspectratio="{{ preview_image.aspect_ratio }}"
+             data-sizes="auto"
+             data-image></span>
+      </div>
+      <div class="placeholder-background placeholder-background--animation" data-image-placeholder></div>
+    </div>
+
+    <noscript>
+      {% capture image_size %}{{ max_height }}x{{ max_height }}{% endcapture %}
+      <img class="grid-view-item__image" src="{{ preview_image | img_url: image_size, scale: 2 }}" alt="{{ preview_image.alt }}" style="max-width: {{ max_height | times: preview_image.aspect_ratio }}px;">
+    </noscript>
+
+    {% capture discount %}
+    {% include 'product-discount', price: product.price, compare_at_price: product.compare_at_price %}
+    {% endcapture %}
+    <span class="vendor">{{ product.vendor | link_to_vendor }}</span>
+    <span class="title">{{ product.title | remove: product.vendor | remove: 'Womens' | remove: "Women's" | remove: "Women`s" | remove: "Women’s" | remove: 'Mens' | remove: "Men's" | remove: 'Kids' }}</span>
+    <div class="stjr-product-rating" data-product-id="{{ product.selected_or_first_available_variant.sku|default:product.selected_or_first_available_variant.id }}"></div>
+    {% render 'okendo-reviews-product-rating-summary', product: product %}
+    <span class="price">{{ product.compare_at_price | money }}</span>
+    <span class="price-with-discount">{{ product.price | money }}</span>
+    {% if discount != blank %}
+    <span class="discount">{{ discount }}</span>
+    <span class="discount-label">{{ discount }}</span>
+    {% endif %}
+
+    {% if show_wishlist == true %}
+    <button class="swym-add-to-wishlist-view-product swym-button swym-iconbtnlink swym-heart swym-loaded product_{{product.id | json}} addToWishList" data-product-handle="{{product.handle}}" data-product-id="{{product.id | json}}" aria-label="Add to Wishlist" intellisuggest=""></button>
+    {% endif %}
+  </div>
+
+  {% comment %}
+  <form id="add-item-{{ product.variants.first.id }}" method="post" action="/cart/add">
+    <input type="hidden" name="quantity" value="1" />
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+
+    <button type="submit" name="add"
+            {% unless current_variant.available %} disabled{% endunless %} class="btn btn-primary addtocart" id="{{ product.variants.first.id }}">
+      <span data-add-to-cart-text>
+        {% unless current_variant.available %}
+          {{ 'products.product.sold_out' | t }}
+        {% else %}
+          {{ 'products.product.add_to_cart' | t }}
+        {% endunless %}
+      </span>
+      <span class="hidden" data-loader>
+        {% include 'icon' with 'spinner' %}
+      </span>
+    </button>
+  </form>
+  {% endcomment %}
+
+</div>

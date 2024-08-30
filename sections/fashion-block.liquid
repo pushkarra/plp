@@ -1,0 +1,120 @@
+
+<div data-section-id="{{ section.id }}">
+  {% comment %}
+  {%- if templateHandle == 'index' -%}
+  <div class="container">
+    <div class="flex">
+      <div class="w-full">
+        <div class="nosto_element" id="frontpage-nosto-4"></div>
+      </div>
+    </div>
+  </div>
+  {%- endif -%}
+  {% endcomment %}
+
+  {%- if section.blocks.size > 0 -%}
+  <div class="fashion-block container mt-8 mb-8">
+
+    {%- assign title = section.settings.title -%}
+
+    <div class="flex flex-wrap sm:-mx-2">
+      <div class="w-full text-center sm:px-2">
+        <h2 class="h2">{{ title }}</h2>
+      </div>
+
+      <div class="slider flex flex-wrap">
+      {%- for block in section.blocks -%}
+        {%- assign image = block.settings.image -%}
+        {%- assign text = block.settings.text -%}
+        {%- assign link_text = block.settings.link_text -%}
+        {%- assign link = block.settings.link -%}
+
+        <div class="w-full sm:w-4/12 px-4 sm:px-2 pb-12 lg:pb-0">
+          {% if image != link %}<a href="{{ link }}" class="nodecoration">{% endif %}
+
+          {% if image != blank %}
+          <img src="{{ image | img_url: '460x' }}" alt="{{ image.alt }}">
+          {% endif %}
+
+          {{ text }}
+
+          {% if image != link %}<span class="nodecoration withArrow">{{ link_text }}</span></a>{% endif %}
+        </div>
+      {%- endfor -%}
+      </div>
+
+    </div>
+
+  </div>
+  {%- endif -%}
+
+  {% comment %}
+  {%- if templateHandle == 'index' -%}
+  <div class="container">
+    <div class="flex">
+      <div class="w-full">
+        <div class="nosto_element" id="frontpage-nosto-1"></div>
+      </div>
+    </div>
+  </div>
+  {%- endif -%}
+  {% endcomment %}
+</div>
+
+{% schema %}
+{
+  "name": "Fashion Block",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "see_all_text",
+          "label": "See All Text"
+        },
+        {
+          "type": "url",
+          "id": "see_all_link",
+          "label": "See All Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fashion Block",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

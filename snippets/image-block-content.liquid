@@ -1,0 +1,35 @@
+
+<div data-section-id="{{ section.id }}">
+    <div class="container image-block mt-0 lg:mt-20 mb-4 text-center">
+  
+      {%- assign section_image_desktop = section.settings.image_desktop -%}
+      {%- assign section_image_tablet = section.settings.image_tablet -%}
+      {%- assign section_link = section.settings.link -%}
+  
+      {% if section_link != blank %}<a href="{{ section_link }}" title="Image block">{% endif %}
+        {% if section_image_desktop != blank %}
+        {% assign img_url = section_image_desktop | img_url: '1x1' | replace: '_1x1.', '_2840x.' %}
+        <img
+          src="{{ section_image_desktop | img_url: '1420x' }}"
+          data-src="{{ img_url }}"
+          data-widths="[710, 1420, 2840]"
+          data-aspectratio="1.0"
+          data-sizes="auto"
+          alt="{{ section_image_desktop.alt }}"
+          class="hidden md:inline-block lazyload">
+        {% endif %}
+  
+        {% if section_image_tablet != blank %}
+        {% assign img_url = section_image_tablet | img_url: '1x1' | replace: '_1x1.', '_768x.' %}
+        <img src="{{ section_image_tablet | img_url: '768x' }}"
+             data-src="{{ img_url }}"
+             data-widths="[284, 568, 768]"
+             data-aspectratio="1.0"
+             data-sizes="auto"
+             alt="{{ section_image_tablet.alt }}"
+             class="inline-block md:hidden lazyload">
+        {% endif %}
+      {% if section_link != blank %}</a>{% endif %}
+  
+    </div>
+  </div>

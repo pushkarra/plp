@@ -1,0 +1,35 @@
+<a href="{{ article.url }}" class="article__link">
+  {% if article.image %}
+  {% capture img_id %}ArticleImage-{{ article.image.id }}{% endcapture %}
+  {% capture img_wrapper_id %}ArticleImageWrapper-{{ article.image.id }}{% endcapture %}
+  {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_380x.' -%}
+
+  {% include 'image-style', image: article.image, height: 507, wrapper_id: img_wrapper_id, img_id: img_id %}
+  <div id="{{ img_wrapper_id }}" class="article__grid-image-wrapper">
+    <div class="article__grid-image-container text-center">
+      <img id="{{ img_id }}"
+           class="article__grid-image lazyload"
+           src="{{ article.image | img_url: '380x507', crop: 'center' }}"
+           data-src="{{ article.image | img_url: '380x507', crop: 'center' }}"
+           data-widths="[180, 380, 472, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+           data-aspectratio="{{ article.image.aspect_ratio }}"
+           data-sizes="auto"
+           alt="">
+    </div>
+  </div>
+  <noscript>
+    <div class="article__grid-image-wrapper">
+      {{ article | img_url: '380x507', scale: 2 | img_tag: article.title, 'article__grid-image' }}
+    </div>
+  </noscript>
+  {% endif %}
+</a>
+
+<div class="article__grid-meta{% if article.image %} article__grid-meta--has-image{% endif %}">
+  <h3 class="article__title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+  <time class="article__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | time_tag: '%b %d, %Y' }}</time>
+
+  {{ article.excerpt | truncate: 100 }}
+</div>
+
+<a href="{{ article.url }}" class="article__link-continue">Continue Reading <span>{% include 'icon' with 'arrow' %}</span></a>

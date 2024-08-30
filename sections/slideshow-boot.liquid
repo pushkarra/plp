@@ -1,0 +1,95 @@
+{% assign skip = section.settings.skip %}
+
+<div class="hp-slideshow mb-6" data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+  {%- if section.blocks.size > 0 -%}
+  <div class="container slideshow text-center hidden {% if skip > 0 %} skip {% endif %}" id="Slideshow-{{ section.id }}" data-skip="{{ section.settings.skip }}">
+
+    {%- for block in section.blocks -%}
+      {%- assign block_image_desktop = block.settings.image_desktop -%}
+      {%- assign block_image_tablet = block.settings.image_tablet -%}
+      {%- assign block_link = block.settings.link -%}
+
+      {%- assign img_url = block_image_desktop | img_url: '1x1' | replace: '_1x1.', '_1400x.' | crop: 'center' -%}
+      {%- assign src = block_image_desktop | img_url: '1400x' | crop: 'center' -%}
+
+      <a href="{{ block_link | append: '?ref=homepage-hero' }}" title="slide">
+        {% if block_image_desktop != blank %}
+        <img
+          src="{{ src }}"
+          data-src="{{ img_url }}"
+          data-widths="[768, 1400]"
+          data-aspectratio="1.0"
+          data-sizes="auto"
+          alt="{{ block_image_desktop.alt }}"
+          class="hidden md:inline-block lazyload">
+        {% endif %}
+
+        {% if block_image_tablet != blank %}
+        {% assign img_url = block_image_tablet | img_url: '1x1' | replace: '_1x1.', '_768x.' %}
+        <img src="{{ block_image_tablet | img_url: '768x' }}"
+             data-src="{{ img_url }}"
+             data-widths="[284, 568, 768]"
+             data-aspectratio="1.0"
+             data-sizes="auto"
+             alt="{{ block_image_tablet.alt }}"
+             class="inline-block md:hidden lazyload">
+        {% endif %}
+      </a>
+
+    {%- endfor -%}
+
+  </div>
+
+  <div class="slideshow-mobile text-center block md:hidden "></div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Slideshow Boot",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "number",
+      "id": "skip",
+      "label": "Skip slides",
+      "default": 0,
+      "info": "To skip the first slide, which consists of two slides, you need to enter the value 2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Image (Desktop)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_tablet",
+          "label": "Image (Tablet&Mobile width:768px)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

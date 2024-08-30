@@ -1,0 +1,15 @@
+{% if value != blank %}
+
+  {% assign cssclass = '' %}
+  {% for pdpSize in pdpSizes %}
+    {%- assign pdpSizeMod = pdpSize | remove: ' Medium ' | remove: '(B,M)' | remove: '(D)' -%}
+    {% if pdpSizeMod == size %}
+      {% assign cssclass = 'active' %}
+    {% endif %}
+  {% endfor %}
+
+  <li class="{{ cssclass }}" data-value="{{ size }}">
+    <span class="header">{{ size }}</span>
+    {{ value }}
+  </li>
+{% endif %}

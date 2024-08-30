@@ -1,0 +1,53 @@
+{% if ref != blank %}
+  {% assign var_ref = '?ref=' | append: ref %}
+{% endif %}
+
+{%- include 'site-nav-megamenu', ref: ref with n -%}
+
+{%- assign child_list_handle = link.title | handleize -%}
+<li class="{% if link.current %}main-menu--active{% endif %} {% if has_megamenu %}has-megamenu{%endif%} {% if link.links != blank %}has-dropdown{% endif %}">
+  <a href="{{ link.url | append: var_ref }}" class="nav-link" aria-label = "{{ link.title }} menu">
+    {{ link.title | escape }}
+  </a>
+  {% if has_megamenu %}
+    <div class="site-nav__dropdown-megamenu" id="megamenu-{{ n }}">
+      <div class="container">
+        <ul>
+          {%- if has_megamenu -%}
+            {{ megamenu }}
+          {%- endif -%}
+
+          {%- if n == 6 -%}
+            {% comment %} Capture Alphabet in Array {% endcomment %}
+            {% capture alphabet %}a-b-c-d-e-f-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z{% endcapture %}
+            {% assign letters = alphabet | split: '-' %}
+            <li class="mm-submenu-{{ n }} brand-nav">
+              <a href="/pages/brands/#other" title="Other brands">#</a>
+              {% for letter in letters %}
+              <a href="/pages/brands/#{{letter}}" title="Brands starting with letter {{letter | upcase}}">{{letter | upcase}}</a>
+              {% endfor %}
+            </li><!-- .brand-nav -->
+          {%- endif -%}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if link.links != blank %}
+    {% include 'icon' with 'arrow' %}
+    <div class="site-nav__dropdown">
+      <ul>
+        {% for childlink in link.links %}
+        <li>
+          <a href="{{ childlink.url | append: var_ref }}"
+             class="site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}"
+             {% if childlink.current %} aria-current="page"{% endif %}
+          >
+            {{ childlink.title | escape }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</li>
